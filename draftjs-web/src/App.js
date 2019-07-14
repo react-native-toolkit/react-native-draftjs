@@ -26,8 +26,9 @@ function App() {
           setEditorState(newEditorState);
         }
         return;
+      default:
+        return getDefaultKeyBinding(e);
     }
-    return getDefaultKeyBinding(e);
   };
 
   const toggleBlockType = blockType => {
@@ -40,13 +41,28 @@ function App() {
 
   return (
     <>
+      <style>
+        {`
+    .public-DraftEditorPlaceholder-root{
+        position: absolute;
+        color: silver;
+        pointer-events: none;
+        z-index: -10000;
+    }
+    `}
+      </style>
       <Editor
         editorState={editorState}
         onChange={setEditorState}
         handleKeyCommand={handleKeyCommand}
         keyBindingFn={mapKeyToEditorCommand}
+        placeholder={"Tell a story..."}
       />
-      <EditorController handleKeyCommand={handleKeyCommand} />
+      <EditorController
+        editorState={editorState}
+        onToggleBlockType={toggleBlockType}
+        onToggleInlineStyle={toggleInlineStyle}
+      />
     </>
   );
 }
