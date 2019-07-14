@@ -1,3 +1,6 @@
+# Build file of the drafjs web editor
+draftjs-html-source/
+
 # OSX
 #
 .DS_Store
