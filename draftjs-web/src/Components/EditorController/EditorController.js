@@ -16,6 +16,24 @@ const EditorController = ({
     .getType();
   const currentStyle = editorState.getCurrentInlineStyle();
 
+  const setIterartor = currentStyle.values();
+  let style = setIterartor.next();
+  let styleString = "";
+  while (!style.done) {
+    if (styleString) styleString += "," + style.value;
+    else styleString = style.value;
+    style = setIterartor.next();
+  }
+
+  if (window.ReactNativeWebView) {
+    window.ReactNativeWebView.postMessage(
+      JSON.stringify({
+        blockType: editorBlockType,
+        styles: styleString
+      })
+    );
+  }
+
   return (
     <div hidden={true}>
       {InlineStyles.map((styleType, styleTypeIndex) => {
