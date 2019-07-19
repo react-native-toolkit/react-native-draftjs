@@ -9,7 +9,10 @@
   },
   "dependencies": {
     "react": "16.8.6",
-    "react-native": "0.60.3"
+    "react-native": "0.60.3",
+    "react-native-draftjs": "/Users/apple/Documents/react-native/react-native-draftjs",
+    "react-native-keyboard-spacer": "^0.4.1",
+    "react-native-webview": "^5.12.1"
   },
   "devDependencies": {
     "@babel/core": "^7.5.4",
