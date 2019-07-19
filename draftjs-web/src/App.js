@@ -39,6 +39,9 @@ function App() {
     setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
   };
 
+  window.toggleBlockType = toggleBlockType;
+  window.toggleInlineStyle = toggleInlineStyle;
+
   return (
     <>
       <style>
