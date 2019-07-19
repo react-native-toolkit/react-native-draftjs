@@ -13,9 +13,8 @@
   },
   "author": "DaniAkash",
   "license": "ISC",
-  "dependencies": {
+  "peerDependencies": {
     "react": "^16.8.6",
-    "react-native": "^0.60.3",
     "react-native-webview": "^5.12.1"
   },
   "devDependencies": {
