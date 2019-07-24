@@ -43,7 +43,9 @@ function App() {
   };
 
   const setDefaultValue = html => {
-    setEditorState(stateFromHTML(html));
+    if (html) {
+      setEditorState(stateFromHTML(html));
+    }
   };
 
   const setEditorPlaceholder = placeholder => {
