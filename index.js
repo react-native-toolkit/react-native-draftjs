@@ -9,10 +9,16 @@ class RNDraftView extends Component {
   static propTypes = {
     style: ViewPropTypes.style,
     onStyleChanged: PropTypes.func,
-    onBlockTypeChanged: PropTypes.func
+    onBlockTypeChanged: PropTypes.func,
+    defaultValue: PropTypes.string,
+    placeholder: PropTypes.string
   };
 
   _webViewRef = React.createRef();
+
+  state = {
+    editorState: ""
+  };
 
   setBlockType = blockType => {
     this._webViewRef.current &&
@@ -30,16 +36,39 @@ class RNDraftView extends Component {
       `);
   };
 
-  onMessage = event => {
+  getEditorState = () => {
+    return this.state.editorState;
+  };
+
+  _onMessage = event => {
     const {
       onStyleChanged = () => null,
       onBlockTypeChanged = () => null
     } = this.props;
     const { data } = event.nativeEvent;
-    const { blockType, styles } = JSON.parse(data);
-    onBlockTypeChanged(blockType);
-    onStyleChanged(styles ? styles.split(",") : []);
+    const { blockType, styles, editorState } = JSON.parse(data);
+    if (blockType) onBlockTypeChanged(blockType);
+    if (styles) onStyleChanged(styles ? styles.split(",") : []);
+    if (editorState) this.setState({ editorState });
   };
+
+  componentDidMount() {
+    const { placeholder, defaultValue } = this.props;
+    if (defaultValue) {
+      this._webViewRef.current &&
+        this._webViewRef.current.injectJavaScript(`
+          window.setDefaultValue("${defaultValue}");
+          true;
+        `);
+    }
+    if (placeholder) {
+      this._webViewRef.current &&
+        this._webViewRef.current.injectJavaScript(`
+          window.setEditorPlaceholder("${placeholder}");
+          true;
+        `);
+    }
+  }
 
   render() {
     const { style = { flex: 1 } } = this.props;
@@ -48,7 +77,7 @@ class RNDraftView extends Component {
         ref={this._webViewRef}
         style={style}
         source={draftJsHtml}
-        onMessage={this.onMessage}
+        onMessage={this._onMessage}
       />
     );
   }
