@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Editor, EditorState, RichUtils, getDefaultKeyBinding } from "draft-js";
+import { stateFromHTML } from "draft-js-import-html";
+import { stateToHTML } from "draft-js-export-html";
 import EditorController from "./Components/EditorController/EditorController";
 
 function App() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [placeholder, setPlaceholder] = useState("");
 
   const handleKeyCommand = (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -39,8 +42,26 @@ function App() {
     setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
   };
 
+  const setDefaultValue = html => {
+    setEditorState(stateFromHTML(html));
+  };
+
+  const setEditorPlaceholder = placeholder => {
+    setPlaceholder(placeholder);
+  };
+
   window.toggleBlockType = toggleBlockType;
   window.toggleInlineStyle = toggleInlineStyle;
+  window.setDefaultValue = setDefaultValue;
+  window.setEditorPlaceholder = setEditorPlaceholder;
+
+  if (window.ReactNativeWebView) {
+    window.ReactNativeWebView.postMessage(
+      JSON.stringify({
+        editorState: stateToHTML(editorState)
+      })
+    );
+  }
 
   return (
     <>
@@ -59,7 +80,7 @@ function App() {
         onChange={setEditorState}
         handleKeyCommand={handleKeyCommand}
         keyBindingFn={mapKeyToEditorCommand}
-        placeholder={"Tell a story..."}
+        placeholder={placeholder}
       />
       <EditorController
         editorState={editorState}
