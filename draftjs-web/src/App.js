@@ -4,6 +4,13 @@ import { stateFromHTML } from "draft-js-import-html";
 import { stateToHTML } from "draft-js-export-html";
 import EditorController from "./Components/EditorController/EditorController";
 
+/**
+ * For testing the post messages
+ * in web
+ */
+// window.ReactNativeWebView ={};
+// window.ReactNativeWebView.postMessage = value => console.log(value);
+
 function App() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [placeholder, setPlaceholder] = useState("");
@@ -60,7 +67,7 @@ function App() {
   if (window.ReactNativeWebView) {
     window.ReactNativeWebView.postMessage(
       JSON.stringify({
-        editorState: stateToHTML(editorState)
+        editorState: stateToHTML(editorState.getCurrentContent())
       })
     );
   }
