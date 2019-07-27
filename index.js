@@ -11,7 +11,11 @@ class RNDraftView extends Component {
     onStyleChanged: PropTypes.func,
     onBlockTypeChanged: PropTypes.func,
     defaultValue: PropTypes.string,
-    placeholder: PropTypes.string
+    placeholder: PropTypes.string,
+    styleSheet: PropTypes.string,
+    styleMap: PropTypes.object,
+    blockRenderMap: PropTypes.object,
+    onEditorReady: PropTypes.func
   };
 
   _webViewRef = React.createRef();
@@ -20,20 +24,19 @@ class RNDraftView extends Component {
     editorState: ""
   };
 
-  setBlockType = blockType => {
+  executeScript = (functionName, parameter) => {
     this._webViewRef.current &&
-      this._webViewRef.current.injectJavaScript(`
-        window.toggleBlockType("${blockType}");
-        true;
-      `);
+      this._webViewRef.current.injectJavaScript(
+        `window.${functionName}(${parameter ? `"${parameter}"` : ""});true;`
+      );
+  };
+
+  setBlockType = blockType => {
+    this.executeScript("toggleBlockType", blockType);
   };
 
   setStyle = style => {
-    this._webViewRef.current &&
-      this._webViewRef.current.injectJavaScript(`
-        window.toggleInlineStyle("${style}");
-        true;
-      `);
+    this.executeScript("toggleInlineStyle", style);
   };
 
   getEditorState = () => {
@@ -46,29 +49,58 @@ class RNDraftView extends Component {
       onBlockTypeChanged = () => null
     } = this.props;
     const { data } = event.nativeEvent;
-    const { blockType, styles, editorState } = JSON.parse(data);
+    const { blockType, styles, editorState, isMounted } = JSON.parse(data);
     if (blockType) onBlockTypeChanged(blockType);
     if (styles) onStyleChanged(styles ? styles.split(",") : []);
     if (editorState) this.setState({ editorState });
+    if (isMounted) this.widgetMounted();
   };
 
-  componentDidMount() {
-    const { placeholder, defaultValue } = this.props;
+  widgetMounted = () => {
+    const {
+      placeholder,
+      defaultValue,
+      styleSheet,
+      styleMap,
+      blockRenderMap,
+      onEditorReady = () => null
+    } = this.props;
+    onEditorReady();
     if (defaultValue) {
-      this._webViewRef.current &&
-        this._webViewRef.current.injectJavaScript(`
-          window.setDefaultValue("${defaultValue}");
-          true;
-        `);
+      this.executeScript("setDefaultValue", defaultValue);
     }
     if (placeholder) {
-      this._webViewRef.current &&
-        this._webViewRef.current.injectJavaScript(`
-          window.setEditorPlaceholder("${placeholder}");
-          true;
-        `);
+      this.executeScript("setEditorPlaceholder", placeholder);
     }
-  }
+    if (styleSheet) {
+      this.executeScript("setEditorStyleSheet", styleSheet);
+    }
+    if (styleMap) {
+      try {
+        this.executeScript("setEditorStyleMap", JSON.stringify(styleMap));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    if (blockRenderMap) {
+      try {
+        this.executeScript(
+          "setEditorBlockRenderMap",
+          JSON.stringify(blockRenderMap)
+        );
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  focus = () => {
+    this.executeScript("focusTextEditor");
+  };
+
+  blur = () => {
+    this.executeScript("blurTextEditor");
+  };
 
   render() {
     const { style = { flex: 1 } } = this.props;
