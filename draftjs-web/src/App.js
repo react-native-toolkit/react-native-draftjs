@@ -36,7 +36,7 @@ function App() {
       if (window.ReactNativeWebView) {
         window.ReactNativeWebView.postMessage(
           JSON.stringify({
-            isMounted
+            isMounted: true
           })
         );
       }
