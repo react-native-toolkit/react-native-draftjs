@@ -1,4 +1,4 @@
-import React, { useState, createRef } from "react";
+import React, { useState, createRef, useEffect } from "react";
 import {
   Editor,
   EditorState,
@@ -25,6 +25,23 @@ function App() {
   const [editorStyle, setEditorStyle] = useState("");
   const [styleMap, setStyleMap] = useState({});
   const [blockRenderMap, setBlockRenderMap] = useState(Map({}));
+  const [isMounted, setMountStatus] = useState(false);
+
+  useEffect(() => {
+    if (!isMounted) {
+      setMountStatus(true);
+      /**
+       * componentDidMount action goes here...
+       */
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            isMounted
+          })
+        );
+      }
+    }
+  }, [isMounted]);
 
   const handleKeyCommand = (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
