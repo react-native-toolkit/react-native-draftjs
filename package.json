@@ -15,7 +15,9 @@
   "license": "ISC",
   "peerDependencies": {
     "react": "^16.8.6",
-    "react-native-webview": "^5.12.1"
+    "react-native-webview": "^5.12.1",
+    "prop-types": "^15.7.2",
+    "react-native": "^0.60.4"
   },
   "devDependencies": {
     "husky": "^3.0.0",
