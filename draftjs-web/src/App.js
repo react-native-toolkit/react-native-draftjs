@@ -1,7 +1,14 @@
 import React, { useState, createRef } from "react";
-import { Editor, EditorState, RichUtils, getDefaultKeyBinding } from "draft-js";
+import {
+  Editor,
+  EditorState,
+  RichUtils,
+  getDefaultKeyBinding,
+  DefaultDraftBlockRenderMap
+} from "draft-js";
 import { stateFromHTML } from "draft-js-import-html";
 import { stateToHTML } from "draft-js-export-html";
+import { Map } from "immutable";
 import EditorController from "./Components/EditorController/EditorController";
 
 /**
@@ -17,6 +24,7 @@ function App() {
   const [placeholder, setPlaceholder] = useState("");
   const [editorStyle, setEditorStyle] = useState("");
   const [styleMap, setStyleMap] = useState({});
+  const [blockRenderMap, setBlockRenderMap] = useState(Map({}));
 
   const handleKeyCommand = (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -78,6 +86,15 @@ function App() {
     _draftEditorRef.current && _draftEditorRef.current.blur();
   };
 
+  const setEditorBlockRenderMap = renderMapString => {
+    try {
+      setBlockRenderMap(Map(JSON.parse(renderMapString)));
+    } catch (e) {
+      setBlockRenderMap(Map({}));
+      console.error(e);
+    }
+  };
+
   window.toggleBlockType = toggleBlockType;
   window.toggleInlineStyle = toggleInlineStyle;
   window.setDefaultValue = setDefaultValue;
@@ -86,6 +103,7 @@ function App() {
   window.setEditorStyleMap = setEditorStyleMap;
   window.focusTextEditor = focusTextEditor;
   window.blurTextEditor = blurTextEditor;
+  window.setEditorBlockRenderMap = setEditorBlockRenderMap;
 
   if (window.ReactNativeWebView) {
     window.ReactNativeWebView.postMessage(
@@ -95,6 +113,8 @@ function App() {
     );
   }
 
+  const customBlockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
+
   return (
     <>
       <style>
@@ -103,6 +123,7 @@ function App() {
       <Editor
         ref={_draftEditorRef}
         customStyleMap={styleMap}
+        blockRenderMap={customBlockRenderMap}
         editorState={editorState}
         onChange={setEditorState}
         handleKeyCommand={handleKeyCommand}
