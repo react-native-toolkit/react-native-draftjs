@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, createRef } from "react";
 import { Editor, EditorState, RichUtils, getDefaultKeyBinding } from "draft-js";
 import { stateFromHTML } from "draft-js-import-html";
 import { stateToHTML } from "draft-js-export-html";
@@ -12,8 +12,11 @@ import EditorController from "./Components/EditorController/EditorController";
 // window.ReactNativeWebView.postMessage = value => console.log(value);
 
 function App() {
+  const _draftEditorRef = createRef();
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [placeholder, setPlaceholder] = useState("");
+  const [editorStyle, setEditorStyle] = useState("");
+  const [styleMap, setStyleMap] = useState({});
 
   const handleKeyCommand = (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -59,10 +62,30 @@ function App() {
     setPlaceholder(placeholder);
   };
 
+  const setEditorStyleSheet = styleSheet => {
+    setEditorStyle(styleSheet);
+  };
+
+  const setEditorStyleMap = editorStyleMap => {
+    setStyleMap(editorStyleMap);
+  };
+
+  const focusTextEditor = () => {
+    _draftEditorRef.current && _draftEditorRef.current.focus();
+  };
+
+  const blurTextEditor = () => {
+    _draftEditorRef.current && _draftEditorRef.current.blur();
+  };
+
   window.toggleBlockType = toggleBlockType;
   window.toggleInlineStyle = toggleInlineStyle;
   window.setDefaultValue = setDefaultValue;
   window.setEditorPlaceholder = setEditorPlaceholder;
+  window.setEditorStyleSheet = setEditorStyleSheet;
+  window.setEditorStyleMap = setEditorStyleMap;
+  window.focusTextEditor = focusTextEditor;
+  window.blurTextEditor = blurTextEditor;
 
   if (window.ReactNativeWebView) {
     window.ReactNativeWebView.postMessage(
@@ -75,16 +98,11 @@ function App() {
   return (
     <>
       <style>
-        {`
-    .public-DraftEditorPlaceholder-root{
-        position: absolute;
-        color: silver;
-        pointer-events: none;
-        z-index: -10000;
-    }
-    `}
+        {`.public-DraftEditorPlaceholder-root{position: absolute;color: silver;pointer-events: none;z-index: -10000;}${editorStyle}`}
       </style>
       <Editor
+        ref={_draftEditorRef}
+        customStyleMap={styleMap}
         editorState={editorState}
         onChange={setEditorState}
         handleKeyCommand={handleKeyCommand}
