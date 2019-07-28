@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && ./generate-js.sh",
+    "build": "react-scripts build && mkdir -p ../draftjs-html-source && inliner -ni ./build/index.html > ../draftjs-html-source/index.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
