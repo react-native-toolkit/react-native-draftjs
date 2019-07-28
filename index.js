@@ -50,8 +50,8 @@ class RNDraftView extends Component {
     } = this.props;
     const { data } = event.nativeEvent;
     const { blockType, styles, editorState, isMounted } = JSON.parse(data);
+    onStyleChanged(styles ? styles.split(",") : []);
     if (blockType) onBlockTypeChanged(blockType);
-    if (styles) onStyleChanged(styles ? styles.split(",") : []);
     if (editorState) this.setState({ editorState });
     if (isMounted) this.widgetMounted();
   };
