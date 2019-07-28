@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { ViewPropTypes } from "react-native";
+import { ViewPropTypes, Platform } from "react-native";
 import WebView from "react-native-webview";
 import PropTypes from "prop-types";
 
-const draftJsHtml = require("./draftjs-html-source/index.html");
+const draftJsHtml = require("./draftjs-html-source/draftjs-source.html");
 
 class RNDraftView extends Component {
   static propTypes = {
@@ -66,7 +66,6 @@ class RNDraftView extends Component {
       blockRenderMap,
       onEditorReady = () => null
     } = this.props;
-    onEditorReady();
     if (defaultValue) {
       this.executeScript("setDefaultValue", defaultValue);
     }
@@ -93,6 +92,7 @@ class RNDraftView extends Component {
         console.error(e);
       }
     }
+    onEditorReady();
   };
 
   focus = () => {
@@ -109,7 +109,14 @@ class RNDraftView extends Component {
       <WebView
         ref={this._webViewRef}
         style={style}
-        source={draftJsHtml}
+        source={
+          Platform.OS === "ios"
+            ? draftJsHtml
+            : { uri: "file:///android_asset/draftjs-source.html" }
+        }
+        useWebKit={true}
+        keyboardDisplayRequiresUserAction={false}
+        originWhitelist={["*"]}
         onMessage={this._onMessage}
       />
     );
