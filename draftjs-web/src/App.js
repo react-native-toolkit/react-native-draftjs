@@ -78,8 +78,12 @@ function App() {
   };
 
   const setDefaultValue = html => {
-    if (html) {
-      setEditorState(stateFromHTML(html));
+    try {
+      if (html) {
+        setEditorState(EditorState.createWithContent(stateFromHTML(html)));
+      }
+    } catch (e) {
+      console.error(e);
     }
   };
 
