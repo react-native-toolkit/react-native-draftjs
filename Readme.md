@@ -4,6 +4,9 @@ A full fledged React Native Rich Text editor based on [Draft.js](https://draftjs
 
 ### Installation
 
+#### React Native Webview
+This project requires the latest version of [React Native Webview](https://github.com/react-native-community/react-native-webview) to be installed and linked to work properly.
+
 Install using npm:
 
 ```sh
@@ -16,7 +19,7 @@ Install using yarn:
 yarn add react-native-draftjs-editor
 ```
 
-# For Android alone
+### For Android alone
 
 After installation, add the following lines to the end of your `android/app/build.gradle` file
 
