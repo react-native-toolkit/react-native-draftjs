@@ -1,7 +1,7 @@
 {
   "name": "react-native-draftjs-editor",
   "version": "0.0.1",
-  "description": "",
+  "description": "A full fledged React Native Rich Text editor based on draft.js",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,8 +11,15 @@
       "pre-commit": "pretty-quick --staged"
     }
   },
-  "author": "DaniAkash",
-  "license": "ISC",
+  "keywords": [
+    "react",
+    "react-native",
+    "draftjs",
+    "rich-text-editor"
+  ],
+  "author": "DaniAkash <s.daniakash@gmail.com> (https://github.com/DaniAkash)",
+  "repository": "DaniAkash/react-native-draftjs",
+  "license": "MIT",
   "peerDependencies": {
     "react": "^16.8.6",
     "react-native-webview": "^5.12.1",

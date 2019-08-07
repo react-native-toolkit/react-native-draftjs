@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
 
 Refer the working example in [`ReactNativeDraftjsExample/`](https://github.com/DaniAkash/react-native-draftjs/tree/master/ReactNativeDraftjsExample) directory
 
-If you run across any isses, please note that Draft.js is **not** fully mobile compatible yet. Before raising any issues in this repository please check if your issue exists in the following lists:
+If you run across any issues, please note that Draft.js is **not** fully mobile compatible yet. Before raising any issues in this repository please check if your issue exists in the following lists:
 
 - https://github.com/facebook/draft-js/labels/android
 - https://github.com/facebook/draft-js/labels/ios
