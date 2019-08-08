@@ -27,7 +27,7 @@ class RNDraftView extends Component {
   executeScript = (functionName, parameter) => {
     this._webViewRef.current &&
       this._webViewRef.current.injectJavaScript(
-        `window.${functionName}(${parameter ? `"${parameter}"` : ""});true;`
+        `window.${functionName}(${parameter ? `'${parameter}'` : ""});true;`
       );
   };
 

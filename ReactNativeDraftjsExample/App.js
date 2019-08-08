@@ -65,8 +65,19 @@ const EditorToolBar = ({
         isActive={blockType === "ordered-list-item"}
         action={() => toggleBlockType("ordered-list-item")}
       />
+      <ControlButton
+        text={"--"}
+        isActive={activeStyles.includes("STRIKETHROUGH")}
+        action={() => toggleStyle("STRIKETHROUGH")}
+      />
     </View>
   );
+};
+
+const styleMap = {
+  STRIKETHROUGH: {
+    textDecoration: "line-through"
+  }
 };
 
 const App = () => {
@@ -96,7 +107,7 @@ const App = () => {
      * Usually keep it in the submit or next action to get output after user has typed.
      */
     setEditorState(_draftRef.current ? _draftRef.current.getEditorState() : "");
-  });
+  }, [_draftRef]);
   console.log(editorState);
 
   return (
@@ -109,6 +120,7 @@ const App = () => {
         ref={_draftRef}
         onStyleChanged={setActiveStyles}
         onBlockTypeChanged={setActiveBlockType}
+        styleMap={styleMap}
       />
       <EditorToolBar
         activeStyles={activeStyles}
