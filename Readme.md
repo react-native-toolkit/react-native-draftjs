@@ -35,21 +35,26 @@ _iOS installation does not require any additional steps._
 
 ### Props
 
-| Name               | Type                                                                          | Description                                                                                                                                                                                     |
-| ------------------ | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| defaultValue       | String                                                                        | The default value with which the editor should be populated. Should be an HTML string generated from draft.js using [draft-js-export-html](https://www.npmjs.com/package/draft-js-export-html). |
-| onEditorReady      | Function                                                                      | A callback function that will be called when the editor has loaded and is ready to use. Ensure this function is called before you apply any instance methods.                                   |
-| style              | [React Native View Style](https://facebook.github.io/react-native/docs/style) | Use this to style the View Component that is wrapping the rich text editor.                                                                                                                     |
-| placeholder        | String                                                                        | A placeholder string for the text editor.                                                                                                                                                       |
-| ref                | React Ref Object                                                              | Pass a ref here to access the instance methods.                                                                                                                                                 |
-| onStyleChanged     | Function                                                                      | Will call a function with an Array of styles [] in the current editor's context. Use this to keep track of the applied styles in the editor.                                                    |
-| onBlockTypeChanged | Function                                                                      | will call a function with a block type in the current editor's context. Use this to keep track of the applied block types in the editor.                                                        |
+| Name               | Type                                                                          | Description                                                                                                                                                                                        |
+| ------------------ | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| defaultValue       | String                                                                        | The default value with which the editor should be populated. Should be an HTML string generated from draft.js using [draft-js-export-html](https://www.npmjs.com/package/draft-js-export-html).    |
+| onEditorReady      | Function                                                                      | A callback function that will be called when the editor has loaded and is ready to use. Ensure this function is called before you apply any instance methods.                                      |
+| style              | [React Native View Style](https://facebook.github.io/react-native/docs/style) | Use this to style the View Component that is wrapping the rich text editor.                                                                                                                        |
+| placeholder        | String                                                                        | A placeholder string for the text editor.                                                                                                                                                          |
+| ref                | React Ref Object                                                              | Pass a ref here to access the instance methods.                                                                                                                                                    |
+| onStyleChanged     | Function                                                                      | Will call a function with an Array of styles [] in the current editor's context. Use this to keep track of the applied styles in the editor.                                                       |
+| onBlockTypeChanged | Function                                                                      | will call a function with a block type in the current editor's context. Use this to keep track of the applied block types in the editor.                                                           |
+| styleMap           | Object                                                                        | A custom style map you can pass to add custom styling of elements in your text editor. Refer [Draft.js](https://draftjs.org/docs/advanced-topics-inline-styles#mapping-a-style-string-to-css) Docs |
+| styleSheet         | String                                                                        | A CSS string which you can pass to style the HTML in which the rich text editor is running. This can be used if you want to change fonts and background colors of the editor etc.                  |
+
+`styleMap` and `styleSheet` are parsed as strings and are sent over to the webview. To prevent the string parsing from failing, please do not use single quotes `'` within the `styleMap` object's keys and values or inside the `styleSheet` string.
 
 ### Instance methods
 
 | Name           | Params                                                                                                                                                      | Description                                                                                                                                  |
 | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | focus          | -                                                                                                                                                           | shift focus to the rich text editor                                                                                                          |
+| blur           | -                                                                                                                                                           | removes focus from the rich text editor                                                                                                      |
 | setStyle       | `BOLD`, `ITALIC`, `UNDERLINE` and `CODE`                                                                                                                    | call this instance method to apply a style to the selected/active text. Call this again with the same style to remove it.                    |
 | setBlockType   | Supports the default block types supported by draft.js [editor](https://github.com/facebook/draft-js/blob/master/src/component/utils/DraftStyleDefault.css) | Call this instance method to apply and call it again to remove the style.                                                                    |
 | getEditorState | -                                                                                                                                                           | Returns the current editor state as a HTML string exported using [draft-js-export-html](https://www.npmjs.com/package/draft-js-export-html). |
@@ -116,8 +121,19 @@ const EditorToolBar = ({
         isActive={blockType === "ordered-list-item"}
         action={() => toggleBlockType("ordered-list-item")}
       />
+      <ControlButton
+        text={"--"}
+        isActive={activeStyles.includes("STRIKETHROUGH")}
+        action={() => toggleStyle("STRIKETHROUGH")}
+      />
     </View>
   );
+};
+
+const styleMap = {
+  STRIKETHROUGH: {
+    textDecoration: "line-through"
+  }
 };
 
 const App = () => {
@@ -147,7 +163,7 @@ const App = () => {
      * Usually keep it in the submit or next action to get output after user has typed.
      */
     setEditorState(_draftRef.current ? _draftRef.current.getEditorState() : "");
-  });
+  }, [_draftRef]);
   console.log(editorState);
 
   return (
@@ -160,6 +176,7 @@ const App = () => {
         ref={_draftRef}
         onStyleChanged={setActiveStyles}
         onBlockTypeChanged={setActiveBlockType}
+        styleMap={styleMap}
       />
       <EditorToolBar
         activeStyles={activeStyles}
@@ -189,6 +206,8 @@ const styles = StyleSheet.create({
     borderRadius: 2
   }
 });
+
+export default App;
 ```
 
 ### The above code will create the following editor view:
@@ -204,8 +223,8 @@ If you run across any issues, please note that Draft.js is **not** fully mobile 
 
 ## TODO
 
-- [ ] Custom Style map.
+- [x] Custom Style map.
 - [ ] Custom Block Components.
-- [ ] CSS Styling of the editor
+- [x] CSS Styling of the editor
 - [ ] Test Cases
 - [ ] Native iOS and Android libraries
