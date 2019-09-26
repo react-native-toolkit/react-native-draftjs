@@ -70,7 +70,7 @@ class RNDraftView extends Component {
     } = this.props;
     this.executeScript("setSourceType", sourceType);
     if (defaultValue) {
-      this.executeScript("setDefaultValue", defaultValue);
+      this.executeScript("setDefaultValue", defaultValue.replace(/(?:\r\n|\r|\n)/g, '\\n'));
     }
     if (placeholder) {
       this.executeScript("setEditorPlaceholder", placeholder);
