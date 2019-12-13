@@ -6,15 +6,15 @@ export enum StyleTypes {
 }
 export type StyleType = keyof typeof StyleTypes
 export interface RNDraftViewProps {
-    defaultValue?: string | undefined,
-    onEditorReady: Function
+    defaultValue?: string | undefined;
+    onEditorReady: Function;
     style?: StyleProp<ViewStyle>;
-    placeholder?: string,
+    placeholder?: string;
     ref: React.Ref<any>;
-    onStyleChanged: Function,
-    onBlockTypeChanged: Function,
-    styleMap?: object,
-    styleSheet?: string,
+    onStyleChanged: Function;
+    onBlockTypeChanged: Function;
+    styleMap?: object;
+    styleSheet?: string;
 }
 
 /**
@@ -25,25 +25,24 @@ declare class RNDraftView extends Component<RNDraftViewProps> {
     /**
     * Shift focus to the rich text editor
     */
-    focus(): void;
+    focus: () => void;
     /**
      * Remove focus from the rich text editor
      */
-    blur(): void;
+    blur: () => void;
     /**
      * Apply a style to the selected/active text. Call again with the same style to remove it
      */
-    setStyle(style: StyleType): void;
+    setStyle: (style: StyleType) => void;
     /**
      * Apply default block types supported by draft.js. Call again to remove the block type style
      */
-    setBlockType(blockType: string): void;
+    setBlockType: (blockType: string) => void;
     /**
      * Return the current editor state as a HTML string exported using `draft-js-export-html`
      */
-    getEditorState(): string;
+    getEditorState: () => string;
 
 }
-// export as namespace RNDraftView;
 export { RNDraftView };
 export default RNDraftView;
