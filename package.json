@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "types": "react-native-draftjs-editor.d.ts",
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged"
