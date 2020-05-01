@@ -7,6 +7,7 @@ const draftJsHtml = require("./draftjs-html-source/draftjs-source.html");
 
 class RNDraftView extends Component {
   static propTypes = {
+    sourceType: PropTypes.oneOf(["html", "markdown"]),
     style: ViewPropTypes.style,
     onStyleChanged: PropTypes.func,
     onBlockTypeChanged: PropTypes.func,
@@ -45,6 +46,7 @@ class RNDraftView extends Component {
 
   _onMessage = event => {
     const {
+      sourceType,
       onStyleChanged = () => null,
       onBlockTypeChanged = () => null
     } = this.props;
@@ -52,13 +54,24 @@ class RNDraftView extends Component {
     const { blockType, styles, editorState, isMounted } = JSON.parse(data);
     onStyleChanged(styles ? styles.split(",") : []);
     if (blockType) onBlockTypeChanged(blockType);
-    if (editorState)
-      this.setState({ editorState: editorState.replace(/(\r\n|\n|\r)/gm, "") });
+    if (editorState) {
+      switch (sourceType) {
+        case "markdown":
+          this.setState({ editorState });
+          break;
+        default:
+          this.setState({
+            editorState: editorState.replace(/(?:\r\n|\r|\n)/g, "")
+          });
+      }
+    }
+
     if (isMounted) this.widgetMounted();
   };
 
   widgetMounted = () => {
     const {
+      sourceType = "html",
       placeholder,
       defaultValue,
       styleSheet,
@@ -66,8 +79,18 @@ class RNDraftView extends Component {
       blockRenderMap,
       onEditorReady = () => null
     } = this.props;
+    this.executeScript("setSourceType", sourceType);
     if (defaultValue) {
-      this.executeScript("setDefaultValue", defaultValue);
+      switch (sourceType) {
+        case "markdown":
+          this.executeScript(
+            "setDefaultValue",
+            defaultValue.replace(/(?:\r\n|\r|\n)/g, "\\n")
+          );
+          break;
+        default:
+          this.executeScript("setDefaultValue", defaultValue);
+      }
     }
     if (placeholder) {
       this.executeScript("setEditorPlaceholder", placeholder);
@@ -114,7 +137,7 @@ class RNDraftView extends Component {
             ? draftJsHtml
             : { uri: "file:///android_asset/draftjs-source.html" }
         }
-        useWebKit={true}
+        useWebKit
         keyboardDisplayRequiresUserAction={false}
         originWhitelist={["*"]}
         onMessage={this._onMessage}
