@@ -5,6 +5,7 @@ A full fledged React Native Rich Text editor based on [Draft.js](https://draftjs
 ### Installation
 
 #### React Native Webview
+
 This project requires the latest version of [React Native Webview](https://github.com/react-native-community/react-native-webview) to be installed and linked to work properly.
 
 Install using npm:
@@ -41,6 +42,7 @@ _iOS installation does not require any additional steps._
 | Name               | Type                                                                          | Description                                                                                                                                                                                        |
 | ------------------ | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | defaultValue       | String                                                                        | The default value with which the editor should be populated. Should be an HTML string generated from draft.js using [draft-js-export-html](https://www.npmjs.com/package/draft-js-export-html).    |
+| sourceType         | String                                                                        | A string property of "html" or "markdown" that defines the input and output of the editor, defaults to "html"                                                                                      |
 | onEditorReady      | Function                                                                      | A callback function that will be called when the editor has loaded and is ready to use. Ensure this function is called before you apply any instance methods.                                      |
 | style              | [React Native View Style](https://facebook.github.io/react-native/docs/style) | Use this to style the View Component that is wrapping the rich text editor.                                                                                                                        |
 | placeholder        | String                                                                        | A placeholder string for the text editor.                                                                                                                                                          |
