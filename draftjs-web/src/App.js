@@ -4,7 +4,7 @@ import {
   EditorState,
   RichUtils,
   getDefaultKeyBinding,
-  DefaultDraftBlockRenderMap
+  DefaultDraftBlockRenderMap,
 } from "draft-js";
 import { stateFromHTML } from "draft-js-import-html";
 import { stateToHTML } from "draft-js-export-html";
@@ -15,12 +15,14 @@ import EditorController from "./Components/EditorController/EditorController";
  * For testing the post messages
  * in web
  */
-// window.ReactNativeWebView ={};
-// window.ReactNativeWebView.postMessage = value => console.log(value);
+// window.ReactNativeWebView = {};
+// window.ReactNativeWebView.postMessage = (value) => console.log(value);
 
 function App() {
   const _draftEditorRef = createRef();
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
   const [placeholder, setPlaceholder] = useState("");
   const [editorStyle, setEditorStyle] = useState("");
   const [styleMap, setStyleMap] = useState({});
@@ -33,13 +35,11 @@ function App() {
       /**
        * componentDidMount action goes here...
        */
-      if (window.ReactNativeWebView) {
-        window.ReactNativeWebView.postMessage(
-          JSON.stringify({
-            isMounted: true
-          })
-        );
-      }
+      const result = window?.ReactNativeWebView?.postMessage?.(
+        JSON.stringify({
+          isMounted: true,
+        })
+      );
     }
   }, [isMounted]);
 
@@ -52,7 +52,7 @@ function App() {
     return false;
   };
 
-  const mapKeyToEditorCommand = e => {
+  const mapKeyToEditorCommand = (e) => {
     switch (e.keyCode) {
       case 9: // TAB
         const newEditorState = RichUtils.onTab(
@@ -69,15 +69,15 @@ function App() {
     }
   };
 
-  const toggleBlockType = blockType => {
+  const toggleBlockType = (blockType) => {
     setEditorState(RichUtils.toggleBlockType(editorState, blockType));
   };
 
-  const toggleInlineStyle = inlineStyle => {
+  const toggleInlineStyle = (inlineStyle) => {
     setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
   };
 
-  const setDefaultValue = html => {
+  const setDefaultValue = (html) => {
     try {
       if (html) {
         setEditorState(EditorState.createWithContent(stateFromHTML(html)));
@@ -87,15 +87,15 @@ function App() {
     }
   };
 
-  const setEditorPlaceholder = placeholder => {
+  const setEditorPlaceholder = (placeholder) => {
     setPlaceholder(placeholder);
   };
 
-  const setEditorStyleSheet = styleSheet => {
+  const setEditorStyleSheet = (styleSheet) => {
     setEditorStyle(styleSheet);
   };
 
-  const setEditorStyleMap = editorStyleMap => {
+  const setEditorStyleMap = (editorStyleMap) => {
     setStyleMap(editorStyleMap);
   };
 
@@ -107,7 +107,7 @@ function App() {
     _draftEditorRef.current && _draftEditorRef.current.blur();
   };
 
-  const setEditorBlockRenderMap = renderMapString => {
+  const setEditorBlockRenderMap = (renderMapString) => {
     try {
       setBlockRenderMap(Map(JSON.parse(renderMapString)));
     } catch (e) {
@@ -126,13 +126,11 @@ function App() {
   window.blurTextEditor = blurTextEditor;
   window.setEditorBlockRenderMap = setEditorBlockRenderMap;
 
-  if (window.ReactNativeWebView) {
-    window.ReactNativeWebView.postMessage(
-      JSON.stringify({
-        editorState: stateToHTML(editorState.getCurrentContent())
-      })
-    );
-  }
+  const result = window?.ReactNativeWebView?.postMessage?.(
+    JSON.stringify({
+      editorState: stateToHTML(editorState.getCurrentContent()),
+    })
+  );
 
   const customBlockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
 
@@ -151,11 +149,13 @@ function App() {
         keyBindingFn={mapKeyToEditorCommand}
         placeholder={placeholder}
       />
-      <EditorController
-        editorState={editorState}
-        onToggleBlockType={toggleBlockType}
-        onToggleInlineStyle={toggleInlineStyle}
-      />
+      {window?.ReactNativeWebView ? null : (
+        <EditorController
+          editorState={editorState}
+          onToggleBlockType={toggleBlockType}
+          onToggleInlineStyle={toggleInlineStyle}
+        />
+      )}
     </>
   );
 }

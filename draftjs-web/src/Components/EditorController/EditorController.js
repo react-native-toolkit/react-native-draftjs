@@ -35,7 +35,7 @@ const EditorController = ({
   }
 
   return (
-    <div hidden={true}>
+    <div>
       {InlineStyles.map((styleType, styleTypeIndex) => {
         return (
           <ControllerButton
