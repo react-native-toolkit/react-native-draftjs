@@ -40,6 +40,7 @@
     ]
   },
   "devDependencies": {
+    "@types/draft-js": "^0.10.40",
     "inliner": "^1.13.1"
   }
 }

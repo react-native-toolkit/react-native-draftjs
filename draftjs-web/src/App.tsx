@@ -1,15 +1,19 @@
-import React, { useState, createRef, useEffect } from "react";
+import React, { useState, useEffect, useRef, KeyboardEvent } from "react";
 import {
   Editor,
   EditorState,
   RichUtils,
   getDefaultKeyBinding,
   DefaultDraftBlockRenderMap,
+  DraftHandleValue
 } from "draft-js";
 import { stateFromHTML } from "draft-js-import-html";
 import { stateToHTML } from "draft-js-export-html";
 import { Map } from "immutable";
 import EditorController from "./Components/EditorController/EditorController";
+import { ICustomWindow } from "./types/ICustomWindow";
+
+declare let window: ICustomWindow;
 
 /**
  * For testing the post messages
@@ -19,7 +23,7 @@ import EditorController from "./Components/EditorController/EditorController";
 // window.ReactNativeWebView.postMessage = (value) => console.log(value);
 
 function App() {
-  const _draftEditorRef = createRef();
+  const _draftEditorRef = useRef<Editor>(null);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -35,6 +39,7 @@ function App() {
       /**
        * componentDidMount action goes here...
        */
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const result = window?.ReactNativeWebView?.postMessage?.(
         JSON.stringify({
           isMounted: true,
@@ -43,41 +48,28 @@ function App() {
     }
   }, [isMounted]);
 
-  const handleKeyCommand = (command, editorState) => {
+  const handleKeyCommand = (command: string, editorState: EditorState): DraftHandleValue => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
       setEditorState(newState);
-      return true;
+      return "handled";
     }
-    return false;
+    return "not-handled";
   };
 
-  const mapKeyToEditorCommand = (e) => {
-    switch (e.keyCode) {
-      case 9: // TAB
-        const newEditorState = RichUtils.onTab(
-          e,
-          editorState,
-          4 /* maxDepth */
-        );
-        if (newEditorState !== editorState) {
-          setEditorState(newEditorState);
-        }
-        return;
-      default:
-        return getDefaultKeyBinding(e);
-    }
+  const mapKeyToEditorCommand = (e: KeyboardEvent<{}>) => {
+    return getDefaultKeyBinding(e);
   };
 
-  const toggleBlockType = (blockType) => {
+  const toggleBlockType = (blockType: string) => {
     setEditorState(RichUtils.toggleBlockType(editorState, blockType));
   };
 
-  const toggleInlineStyle = (inlineStyle) => {
+  const toggleInlineStyle = (inlineStyle: string) => {
     setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
   };
 
-  const setDefaultValue = (html) => {
+  const setDefaultValue = (html: string) => {
     try {
       if (html) {
         setEditorState(EditorState.createWithContent(stateFromHTML(html)));
@@ -87,16 +79,16 @@ function App() {
     }
   };
 
-  const setEditorPlaceholder = (placeholder) => {
+  const setEditorPlaceholder = (placeholder: string) => {
     setPlaceholder(placeholder);
   };
 
-  const setEditorStyleSheet = (styleSheet) => {
+  const setEditorStyleSheet = (styleSheet: string) => {
     setEditorStyle(styleSheet);
   };
 
-  const setEditorStyleMap = (editorStyleMap) => {
-    setStyleMap(editorStyleMap);
+  const setEditorStyleMap = (editorStyleMap: string) => {
+    setStyleMap(JSON.parse(editorStyleMap));
   };
 
   const focusTextEditor = () => {
@@ -107,7 +99,7 @@ function App() {
     _draftEditorRef.current && _draftEditorRef.current.blur();
   };
 
-  const setEditorBlockRenderMap = (renderMapString) => {
+  const setEditorBlockRenderMap = (renderMapString: string) => {
     try {
       setBlockRenderMap(Map(JSON.parse(renderMapString)));
     } catch (e) {
@@ -126,6 +118,7 @@ function App() {
   window.blurTextEditor = blurTextEditor;
   window.setEditorBlockRenderMap = setEditorBlockRenderMap;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const result = window?.ReactNativeWebView?.postMessage?.(
     JSON.stringify({
       editorState: stateToHTML(editorState.getCurrentContent()),
@@ -152,7 +145,9 @@ function App() {
       {window?.ReactNativeWebView ? null : (
         <EditorController
           editorState={editorState}
+          //@ts-ignore
           onToggleBlockType={toggleBlockType}
+          //@ts-ignore
           onToggleInlineStyle={toggleInlineStyle}
         />
       )}
