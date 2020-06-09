@@ -9,6 +9,10 @@ import {
 } from "draft-js";
 import { stateFromHTML } from "draft-js-import-html";
 import { stateToHTML } from "draft-js-export-html";
+// @ts-ignore
+import { stateFromMarkdown } from "draft-js-import-markdown";
+// @ts-ignore
+import { stateToMarkdown } from "draft-js-export-markdown";
 import { Map } from "immutable";
 import EditorController from "./Components/EditorController/EditorController";
 import { ICustomWindow } from "./types/ICustomWindow";
@@ -19,16 +23,23 @@ declare let window: ICustomWindow;
  * For testing the post messages
  * in web
  */
-// @ts-ignore
-// window.ReactNativeWebView = {};
-// @ts-ignore
-// window.ReactNativeWebView.postMessage = (value) => console.log(value);
+// window.ReactNativeWebView = {
+//   postMessage: (value) => console.log(value)
+// };
+
+export type editorModeType = "html" | "md";
+
+export type defaultSourceType = {
+  type: editorModeType;
+  value: string;
+};
 
 function App() {
   const _draftEditorRef = useRef<Editor>(null);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+  const [mode, setMode] = useState<editorModeType>("html");
   const [placeholder, setPlaceholder] = useState("");
   const [editorStyle, setEditorStyle] = useState("");
   const [styleMap, setStyleMap] = useState({});
@@ -65,6 +76,10 @@ function App() {
     return getDefaultKeyBinding(e);
   };
 
+  const setEditorMode = (editorMode: editorModeType) => {
+    setMode(editorMode);
+  };
+
   const toggleBlockType = (blockType: string) => {
     setEditorState(RichUtils.toggleBlockType(editorState, blockType));
   };
@@ -73,10 +88,16 @@ function App() {
     setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
   };
 
-  const setDefaultValue = (html: string) => {
+  const setDefaultValue = (data: defaultSourceType) => {
     try {
-      if (html) {
-        setEditorState(EditorState.createWithContent(stateFromHTML(html)));
+      if (data.type === "html") {
+        setEditorState(
+          EditorState.createWithContent(stateFromHTML(data.value))
+        );
+      } else {
+        setEditorState(
+          EditorState.createWithContent(stateFromMarkdown(data.type))
+        );
       }
     } catch (e) {
       console.error(e);
@@ -121,6 +142,7 @@ function App() {
   window.focusTextEditor = focusTextEditor;
   window.blurTextEditor = blurTextEditor;
   window.setEditorBlockRenderMap = setEditorBlockRenderMap;
+  window.setEditorMode = setEditorMode;
 
   const selection = editorState.getSelection();
   const editorBlockType = editorState
@@ -140,14 +162,13 @@ function App() {
 
   window?.ReactNativeWebView?.postMessage?.(
     JSON.stringify({
-      editorState: stateToHTML(editorState.getCurrentContent()),
-    })
-  );
-
-  window?.ReactNativeWebView?.postMessage?.(
-    JSON.stringify({
+      editorState:
+        mode === "html"
+          ? stateToHTML(editorState.getCurrentContent())
+          : stateToMarkdown(editorState.getCurrentContent()),
       blockType: editorBlockType,
       styles: styleString,
+      mode,
     })
   );
 
@@ -174,6 +195,8 @@ function App() {
           onToggleInlineStyle={toggleInlineStyle}
           currentStyle={currentStyle}
           editorBlockType={editorBlockType}
+          mode={mode}
+          setEditorMode={setEditorMode}
         />
       )}
     </>

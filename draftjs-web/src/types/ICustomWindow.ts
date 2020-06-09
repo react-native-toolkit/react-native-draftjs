@@ -1,3 +1,5 @@
+import { editorModeType, defaultSourceType } from "../App";
+
 export type webviewPostMessageType = (value: string) => any;
 
 export interface ICustomWindow extends Window {
@@ -6,11 +8,12 @@ export interface ICustomWindow extends Window {
   };
   toggleBlockType: (value: string) => any;
   toggleInlineStyle: (value: string) => any;
-  setDefaultValue: (value: string) => any;
+  setDefaultValue: (value: defaultSourceType) => any;
   setEditorPlaceholder: (value: string) => any;
   setEditorStyleSheet: (value: string) => any;
   setEditorStyleMap: (value: string) => any;
   focusTextEditor: (value: string) => any;
   blurTextEditor: (value: string) => any;
   setEditorBlockRenderMap: (value: string) => any;
+  setEditorMode: (value: editorModeType) => any;
 }
