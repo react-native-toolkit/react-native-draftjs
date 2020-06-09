@@ -5,7 +5,7 @@ import {
   RichUtils,
   getDefaultKeyBinding,
   DefaultDraftBlockRenderMap,
-  DraftHandleValue
+  DraftHandleValue,
 } from "draft-js";
 import { stateFromHTML } from "draft-js-import-html";
 import { stateToHTML } from "draft-js-export-html";
@@ -19,7 +19,9 @@ declare let window: ICustomWindow;
  * For testing the post messages
  * in web
  */
+// @ts-ignore
 // window.ReactNativeWebView = {};
+// @ts-ignore
 // window.ReactNativeWebView.postMessage = (value) => console.log(value);
 
 function App() {
@@ -39,8 +41,7 @@ function App() {
       /**
        * componentDidMount action goes here...
        */
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const result = window?.ReactNativeWebView?.postMessage?.(
+      window?.ReactNativeWebView?.postMessage?.(
         JSON.stringify({
           isMounted: true,
         })
@@ -48,7 +49,10 @@ function App() {
     }
   }, [isMounted]);
 
-  const handleKeyCommand = (command: string, editorState: EditorState): DraftHandleValue => {
+  const handleKeyCommand = (
+    command: string,
+    editorState: EditorState
+  ): DraftHandleValue => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
       setEditorState(newState);
@@ -118,10 +122,32 @@ function App() {
   window.blurTextEditor = blurTextEditor;
   window.setEditorBlockRenderMap = setEditorBlockRenderMap;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const result = window?.ReactNativeWebView?.postMessage?.(
+  const selection = editorState.getSelection();
+  const editorBlockType = editorState
+    .getCurrentContent()
+    .getBlockForKey(selection.getStartKey())
+    .getType();
+  const currentStyle = editorState.getCurrentInlineStyle();
+
+  const setIterartor = currentStyle.values();
+  let style = setIterartor.next();
+  let styleString = "";
+  while (!style.done) {
+    if (styleString) styleString += "," + style.value;
+    else styleString = style.value;
+    style = setIterartor.next();
+  }
+
+  window?.ReactNativeWebView?.postMessage?.(
     JSON.stringify({
       editorState: stateToHTML(editorState.getCurrentContent()),
+    })
+  );
+
+  window?.ReactNativeWebView?.postMessage?.(
+    JSON.stringify({
+      blockType: editorBlockType,
+      styles: styleString,
     })
   );
 
@@ -144,11 +170,10 @@ function App() {
       />
       {window?.ReactNativeWebView ? null : (
         <EditorController
-          editorState={editorState}
-          //@ts-ignore
           onToggleBlockType={toggleBlockType}
-          //@ts-ignore
           onToggleInlineStyle={toggleInlineStyle}
+          currentStyle={currentStyle}
+          editorBlockType={editorBlockType}
         />
       )}
     </>

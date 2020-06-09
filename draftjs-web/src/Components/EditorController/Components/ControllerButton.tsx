@@ -1,8 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const ControllerButton = ({ isActive, label, onToggle, style }) => {
-  const onClick = e => {
+export interface ControllerButtonProps {
+  isActive: boolean;
+  label: string;
+  onToggle: (type: string) => any;
+  style: string;
+}
+
+const ControllerButton = ({
+  isActive,
+  label,
+  onToggle,
+  style,
+}: ControllerButtonProps) => {
+  const onClick = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     e.preventDefault();
     onToggle(style);
   };
@@ -14,7 +26,7 @@ const ControllerButton = ({ isActive, label, onToggle, style }) => {
         margin: "4px 8px",
         borderRadius: 2,
         border: "1px solid black",
-        padding: "4px 8px"
+        padding: "4px 8px",
       }}
       onMouseDown={onClick}
     >
@@ -27,7 +39,7 @@ ControllerButton.propTypes = {
   isActive: PropTypes.bool,
   label: PropTypes.string,
   onToggle: PropTypes.func,
-  style: PropTypes.string
+  style: PropTypes.string,
 };
 
 export default ControllerButton;
