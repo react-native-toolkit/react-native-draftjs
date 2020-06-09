@@ -21,14 +21,14 @@
   "repository": "DaniAkash/react-native-draftjs",
   "license": "MIT",
   "peerDependencies": {
-    "react": "^16.8.6",
-    "react-native-webview": "^5.12.1",
     "prop-types": "^15.7.2",
-    "react-native": "^0.60.4"
+    "react": "^16.13.1",
+    "react-native": "^0.62.2",
+    "react-native-webview": "^10.2.3"
   },
   "devDependencies": {
-    "husky": "^3.0.0",
-    "prettier": "^1.18.2",
-    "pretty-quick": "^1.11.1"
+    "husky": "^4.2.5",
+    "prettier": "^2.0.5",
+    "pretty-quick": "^2.0.1"
   }
 }
