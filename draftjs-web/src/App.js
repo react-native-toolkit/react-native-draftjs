@@ -8,6 +8,8 @@ import {
 } from "draft-js";
 import { stateFromHTML } from "draft-js-import-html";
 import { stateToHTML } from "draft-js-export-html";
+import { stateFromMarkdown } from "draft-js-import-markdown";
+import { stateToMarkdown } from "draft-js-export-markdown";
 import { Map } from "immutable";
 import EditorController from "./Components/EditorController/EditorController";
 
@@ -77,14 +79,27 @@ function App() {
     setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
   };
 
-  const setDefaultValue = html => {
+  const setDefaultValue = value => {
     try {
-      if (html) {
-        setEditorState(EditorState.createWithContent(stateFromHTML(html)));
+      if (value) {
+        setEditorState(EditorState.createWithContent(stateConverter.from(value)));
       }
     } catch (e) {
       console.error(e);
     }
+  };
+
+  const setSourceType = (sourceType = 'html') => {
+    window.sourceType = sourceType
+  };
+  
+  const stateConverter = {
+    from: (value) => window.sourceType === 'markdown'
+      ? stateFromMarkdown(value)
+      : stateFromHTML(value),
+    to: (value) => window.sourceType === 'markdown'
+      ? stateToMarkdown(value)
+      : stateToHTML(value),
   };
 
   const setEditorPlaceholder = placeholder => {
@@ -118,6 +133,7 @@ function App() {
 
   window.toggleBlockType = toggleBlockType;
   window.toggleInlineStyle = toggleInlineStyle;
+  window.setSourceType = setSourceType;
   window.setDefaultValue = setDefaultValue;
   window.setEditorPlaceholder = setEditorPlaceholder;
   window.setEditorStyleSheet = setEditorStyleSheet;
@@ -129,7 +145,7 @@ function App() {
   if (window.ReactNativeWebView) {
     window.ReactNativeWebView.postMessage(
       JSON.stringify({
-        editorState: stateToHTML(editorState.getCurrentContent())
+        editorState: stateConverter.to(editorState.getCurrentContent())
       })
     );
   }

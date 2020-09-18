@@ -7,6 +7,7 @@ const draftJsHtml = require("./draftjs-html-source/draftjs-source.html");
 
 class RNDraftView extends Component {
   static propTypes = {
+    sourceType: PropTypes.oneOf(['html','markdown']),
     style: ViewPropTypes.style,
     onStyleChanged: PropTypes.func,
     onBlockTypeChanged: PropTypes.func,
@@ -59,6 +60,7 @@ class RNDraftView extends Component {
 
   widgetMounted = () => {
     const {
+      sourceType = 'html',
       placeholder,
       defaultValue,
       styleSheet,
@@ -66,8 +68,9 @@ class RNDraftView extends Component {
       blockRenderMap,
       onEditorReady = () => null
     } = this.props;
+    this.executeScript("setSourceType", sourceType);
     if (defaultValue) {
-      this.executeScript("setDefaultValue", defaultValue);
+      this.executeScript("setDefaultValue", defaultValue.replace(/(?:\r\n|\r|\n)/g, '\\n'));
     }
     if (placeholder) {
       this.executeScript("setEditorPlaceholder", placeholder);
