@@ -2,6 +2,10 @@
 
 A full fledged React Native Rich Text editor based on [Draft.js](https://draftjs.org/)!!
 
+## Looking For Sponsors
+
+This project is in need of a sponsorship for implementing TypeScript & Expo Support. If you are interested in sponsoring, you can buy the [Gold Sponsor](https://www.buymeacoffee.com/daniakash/e/6983) pack. Reach out to me on [Twitter](https://twitter.com/dani_akash_) for more information.
+
 ### Installation
 
 #### React Native Webview
