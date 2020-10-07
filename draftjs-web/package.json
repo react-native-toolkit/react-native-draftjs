@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
     "draft-js": "0.11.7",
     "draft-js-export-html": "^1.4.1",
     "draft-js-export-markdown": "^1.4.0",
@@ -13,11 +16,11 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.3",
-    "typescript": "4.0.3"
+    "typescript": "~3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && mkdir -p ../draftjs-html-source && inliner -ni ./build/index.html > ../draftjs-html-source/draftjs-source.html",
+    "build": "react-scripts build && mkdir -p ../draftjs-html-source && inliner -ni ./build/index.html > ../draftjs-html-source/draftjs-source.html && cp ./build/index.html ../example/android/app/src/main/assets/draftjs-source.html",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -39,10 +42,10 @@
   },
   "devDependencies": {
     "@types/draft-js": "0.10.44",
-    "@types/jest": "26.0.14",
-    "@types/node": "14.11.5",
-    "@types/react": "16.9.51",
-    "@types/react-dom": "^16.9.8",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
     "inliner": "^1.13.1"
   }
 }

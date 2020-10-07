@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, KeyboardEvent } from "react";
+import React, { useState, useEffect, useRef, KeyboardEvent } from 'react';
 import {
   Editor,
   EditorState,
@@ -6,16 +6,16 @@ import {
   getDefaultKeyBinding,
   DefaultDraftBlockRenderMap,
   DraftHandleValue,
-} from "draft-js";
-import { stateFromHTML } from "draft-js-import-html";
-import { stateToHTML } from "draft-js-export-html";
+} from 'draft-js';
+import { stateFromHTML } from 'draft-js-import-html';
+import { stateToHTML } from 'draft-js-export-html';
 // @ts-ignore
-import { stateFromMarkdown } from "draft-js-import-markdown";
+import { stateFromMarkdown } from 'draft-js-import-markdown';
 // @ts-ignore
-import { stateToMarkdown } from "draft-js-export-markdown";
-import { Map } from "immutable";
-import EditorController from "./Components/EditorController/EditorController";
-import { ICustomWindow } from "./types/ICustomWindow";
+import { stateToMarkdown } from 'draft-js-export-markdown';
+import { Map } from 'immutable';
+import EditorController from './Components/EditorController/EditorController';
+import { ICustomWindow } from './types/ICustomWindow';
 
 declare let window: ICustomWindow;
 
@@ -27,21 +27,23 @@ declare let window: ICustomWindow;
 //   postMessage: (value) => console.log(value)
 // };
 
-export type editorModeType = "html" | "md";
+export type editorModeType = 'html' | 'md';
 
-export type defaultSourceType = {
-  type: editorModeType;
-  value: string;
-};
+export type defaultSourceType =
+  | {
+      type: editorModeType;
+      value: string;
+    }
+  | 'string';
 
 function App() {
   const _draftEditorRef = useRef<Editor>(null);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-  const [mode, setMode] = useState<editorModeType>("html");
-  const [placeholder, setPlaceholder] = useState("");
-  const [editorStyle, setEditorStyle] = useState("");
+  const [mode, setMode] = useState<editorModeType>('html');
+  const [placeholder, setPlaceholder] = useState('');
+  const [editorStyle, setEditorStyle] = useState('');
   const [styleMap, setStyleMap] = useState({});
   const [blockRenderMap, setBlockRenderMap] = useState(Map({}));
   const [isMounted, setMountStatus] = useState(false);
@@ -67,9 +69,9 @@ function App() {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
       setEditorState(newState);
-      return "handled";
+      return 'handled';
     }
-    return "not-handled";
+    return 'not-handled';
   };
 
   const mapKeyToEditorCommand = (e: KeyboardEvent<{}>) => {
@@ -90,11 +92,13 @@ function App() {
 
   const setDefaultValue = (data: defaultSourceType) => {
     try {
-      if (data.type === "html") {
+      if (typeof data === 'string') {
+        setEditorState(EditorState.createWithContent(stateFromHTML(data)));
+      } else if (data.type === 'html') {
         setEditorState(
           EditorState.createWithContent(stateFromHTML(data.value))
         );
-      } else {
+      } else if (data.type === 'md') {
         setEditorState(
           EditorState.createWithContent(stateFromMarkdown(data.type))
         );
@@ -153,9 +157,9 @@ function App() {
 
   const setIterartor = currentStyle.values();
   let style = setIterartor.next();
-  let styleString = "";
+  let styleString = '';
   while (!style.done) {
-    if (styleString) styleString += "," + style.value;
+    if (styleString) styleString += ',' + style.value;
     else styleString = style.value;
     style = setIterartor.next();
   }
@@ -163,7 +167,7 @@ function App() {
   window?.ReactNativeWebView?.postMessage?.(
     JSON.stringify({
       editorState:
-        mode === "html"
+        mode === 'html'
           ? stateToHTML(editorState.getCurrentContent())
           : stateToMarkdown(editorState.getCurrentContent()),
       blockType: editorBlockType,
