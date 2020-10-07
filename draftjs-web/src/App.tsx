@@ -6,9 +6,12 @@ import {
   getDefaultKeyBinding,
   DefaultDraftBlockRenderMap,
   DraftHandleValue,
+  convertToRaw,
 } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
 import { stateToHTML } from 'draft-js-export-html';
+// @ts-ignore
+import { stateToMarkdown } from 'draft-js-export-markdown';
 import { Map } from 'immutable';
 import EditorController from './Components/EditorController/EditorController';
 import { ICustomWindow } from './types/ICustomWindow';
@@ -142,6 +145,8 @@ function App() {
   window?.ReactNativeWebView?.postMessage?.(
     JSON.stringify({
       editorState: stateToHTML(editorState.getCurrentContent()),
+      rawState: convertToRaw(editorState.getCurrentContent()),
+      markdownState: stateToMarkdown(editorState.getCurrentContent()),
       blockType: editorBlockType,
       styles: styleString,
     })
