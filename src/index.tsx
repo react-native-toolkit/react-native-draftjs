@@ -1,33 +1,53 @@
-import React, { Component } from 'react';
-import { ViewPropTypes, Platform } from 'react-native';
-import WebView from 'react-native-webview';
-import PropTypes from 'prop-types';
+import React, { Component, createRef } from 'react';
+import type { StyleProp, ViewStyle } from 'react-native';
+import WebView, { WebViewMessageEvent } from 'react-native-webview';
 
 const draftJsHtml = require('../draftjs-html-source/draftjs-source.html');
 
-class RNDraftView extends Component {
-  constructor() {
-    super();
+export type defaultSourceType = 'string';
 
-    this._webViewRef = React.createRef();
+export interface RNDraftViewProps {
+  style?: StyleProp<ViewStyle>;
+  onStyleChanged?: (styles: string[]) => unknown;
+  onBlockTypeChanged?: (blockType: string) => unknown;
+  placeholder?: string;
+  defaultValue?: defaultSourceType;
+  styleSheet?: string;
+  styleMap?: object;
+  blockRenderMap?: object;
+  onEditorReady?: () => unknown;
+}
 
-    this.state = {
-      editorState: '',
-    };
-  }
+export type WebDraftFunctions =
+  | 'toggleBlockType'
+  | 'toggleInlineStyle'
+  | 'setDefaultValue'
+  | 'setEditorPlaceholder'
+  | 'setEditorStyleSheet'
+  | 'setEditorStyleMap'
+  | 'focusTextEditor'
+  | 'blurTextEditor'
+  | 'setEditorBlockRenderMap'
+  | 'setEditorMode';
 
-  executeScript = (functionName, parameter) => {
+class RNDraftView extends Component<RNDraftViewProps, { editorState: string }> {
+  _webViewRef = createRef<WebView>();
+  state = {
+    editorState: '',
+  };
+
+  executeScript = (functionName: WebDraftFunctions, parameter?: string) => {
     this._webViewRef.current &&
       this._webViewRef.current.injectJavaScript(
         `window.${functionName}(${parameter ? `'${parameter}'` : ''});true;`
       );
   };
 
-  setBlockType = (blockType) => {
+  setBlockType = (blockType: string) => {
     this.executeScript('toggleBlockType', blockType);
   };
 
-  setStyle = (style) => {
+  setStyle = (style: string) => {
     this.executeScript('toggleInlineStyle', style);
   };
 
@@ -35,7 +55,7 @@ class RNDraftView extends Component {
     return this.state.editorState;
   };
 
-  _onMessage = (event) => {
+  _onMessage = (event: WebViewMessageEvent) => {
     const {
       onStyleChanged = () => null,
       onBlockTypeChanged = () => null,
@@ -101,12 +121,7 @@ class RNDraftView extends Component {
       <WebView
         ref={this._webViewRef}
         style={style}
-        source={
-          Platform.OS === 'ios'
-            ? draftJsHtml
-            : { uri: 'file:///android_asset/draftjs-source.html' }
-        }
-        useWebKit={true}
+        source={draftJsHtml}
         keyboardDisplayRequiresUserAction={false}
         originWhitelist={['*']}
         onMessage={this._onMessage}
@@ -114,17 +129,5 @@ class RNDraftView extends Component {
     );
   }
 }
-
-RNDraftView.propTypes = {
-  style: ViewPropTypes.style,
-  onStyleChanged: PropTypes.func,
-  onBlockTypeChanged: PropTypes.func,
-  defaultValue: PropTypes.string,
-  placeholder: PropTypes.string,
-  styleSheet: PropTypes.string,
-  styleMap: PropTypes.object,
-  blockRenderMap: PropTypes.object,
-  onEditorReady: PropTypes.func,
-};
 
 export default RNDraftView;
