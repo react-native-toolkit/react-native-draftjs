@@ -3,26 +3,18 @@ import { ViewPropTypes, Platform } from 'react-native';
 import WebView from 'react-native-webview';
 import PropTypes from 'prop-types';
 
-const draftJsHtml = require('./draftjs-html-source/draftjs-source.html');
+const draftJsHtml = require('../draftjs-html-source/draftjs-source.html');
 
 class RNDraftView extends Component {
-  static propTypes = {
-    style: ViewPropTypes.style,
-    onStyleChanged: PropTypes.func,
-    onBlockTypeChanged: PropTypes.func,
-    defaultValue: PropTypes.string,
-    placeholder: PropTypes.string,
-    styleSheet: PropTypes.string,
-    styleMap: PropTypes.object,
-    blockRenderMap: PropTypes.object,
-    onEditorReady: PropTypes.func,
-  };
+  constructor() {
+    super();
 
-  _webViewRef = React.createRef();
+    this._webViewRef = React.createRef();
 
-  state = {
-    editorState: '',
-  };
+    this.state = {
+      editorState: '',
+    };
+  }
 
   executeScript = (functionName, parameter) => {
     this._webViewRef.current &&
@@ -122,5 +114,17 @@ class RNDraftView extends Component {
     );
   }
 }
+
+RNDraftView.propTypes = {
+  style: ViewPropTypes.style,
+  onStyleChanged: PropTypes.func,
+  onBlockTypeChanged: PropTypes.func,
+  defaultValue: PropTypes.string,
+  placeholder: PropTypes.string,
+  styleSheet: PropTypes.string,
+  styleMap: PropTypes.object,
+  blockRenderMap: PropTypes.object,
+  onEditorReady: PropTypes.func,
+};
 
 export default RNDraftView;
