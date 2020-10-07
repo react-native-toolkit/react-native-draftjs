@@ -4,14 +4,12 @@ import WebView, { WebViewMessageEvent } from 'react-native-webview';
 
 const draftJsHtml = require('../draftjs-html-source/draftjs-source.html');
 
-export type defaultSourceType = 'string';
-
 export interface RNDraftViewProps {
   style?: StyleProp<ViewStyle>;
   onStyleChanged?: (styles: string[]) => unknown;
   onBlockTypeChanged?: (blockType: string) => unknown;
   placeholder?: string;
-  defaultValue?: defaultSourceType;
+  defaultValue?: string;
   styleSheet?: string;
   styleMap?: object;
   blockRenderMap?: object;
