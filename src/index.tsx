@@ -27,8 +27,7 @@ export type WebDraftFunctions =
   | 'setEditorStyleMap'
   | 'focusTextEditor'
   | 'blurTextEditor'
-  | 'setEditorBlockRenderMap'
-  | 'setEditorMode';
+  | 'setEditorBlockRenderMap';
 
 class RNDraftView extends Component<RNDraftViewProps, { editorState: string }> {
   _webViewRef = createRef<WebView>();

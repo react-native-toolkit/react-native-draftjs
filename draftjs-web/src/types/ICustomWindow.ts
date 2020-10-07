@@ -1,4 +1,4 @@
-import { editorModeType, defaultSourceType } from "../App";
+import { defaultSourceType } from '../App';
 
 export type webviewPostMessageType = (value: string) => any;
 
@@ -15,5 +15,4 @@ export interface ICustomWindow extends Window {
   focusTextEditor: (value: string) => any;
   blurTextEditor: (value: string) => any;
   setEditorBlockRenderMap: (value: string) => any;
-  setEditorMode: (value: editorModeType) => any;
 }
