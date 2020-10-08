@@ -27,10 +27,15 @@ export type WebDraftFunctions =
   | 'blurTextEditor'
   | 'setEditorBlockRenderMap';
 
-class RNDraftView extends Component<RNDraftViewProps, { editorState: string }> {
+class RNDraftView extends Component<
+  RNDraftViewProps,
+  { editorState: string; rawState: string; markdownState: string }
+> {
   _webViewRef = createRef<WebView>();
   state = {
     editorState: '',
+    rawState: '',
+    markdownState: '',
   };
 
   executeScript = (functionName: WebDraftFunctions, parameter?: string) => {
@@ -52,17 +57,33 @@ class RNDraftView extends Component<RNDraftViewProps, { editorState: string }> {
     return this.state.editorState;
   };
 
+  getRawState = () => {
+    return this.state.rawState;
+  };
+
+  getMarkdownState = () => {
+    return this.state.markdownState;
+  };
+
   _onMessage = (event: WebViewMessageEvent) => {
     const {
       onStyleChanged = () => null,
       onBlockTypeChanged = () => null,
     } = this.props;
     const { data } = event.nativeEvent;
-    const { blockType, styles, editorState, isMounted } = JSON.parse(data);
+    const {
+      blockType,
+      styles,
+      editorState,
+      rawState,
+      markdownState,
+      isMounted,
+    } = JSON.parse(data);
     onStyleChanged(styles ? styles.split(',') : []);
     if (blockType) onBlockTypeChanged(blockType);
-    if (editorState)
-      this.setState({ editorState: editorState.replace(/(\r\n|\n|\r)/gm, '') });
+    if (editorState) this.setState({ editorState });
+    if (rawState) this.setState({ rawState });
+    if (markdownState) this.setState({ markdownState });
     if (isMounted) this.widgetMounted();
   };
 

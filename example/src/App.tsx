@@ -97,6 +97,8 @@ const App = () => {
   const [activeStyles, setActiveStyles] = useState<string[]>([]);
   const [blockType, setActiveBlockType] = useState('unstyled');
   const [editorState, setEditorState] = useState('');
+  const [rawState, setRawState] = useState('');
+  const [markdownState, setMarkdownState] = useState('');
 
   const defaultValue =
     '<h1>A Full fledged Text Editor</h1><p>This editor is built with Draft.js. Hence should be suitable for most projects. However, Draft.js Isn’t fully compatible with mobile yet. So you might face some issues.</p><p><br></p><p>This is a simple implementation</p><ul>  <li>It contains <strong>Text formatting </strong>and <em>Some blocks formatting</em></li>  <li>Each for it’s own purpose</li></ul><p>You can also do</p><ol>  <li>Custom style map</li>  <li>Own css styles</li>  <li>Custom block styling</li></ol><p>You are welcome to try it!</p>';
@@ -123,9 +125,18 @@ const App = () => {
      * Usually keep it in the submit or next action to get output after user has typed.
      */
     setEditorState(_draftRef.current ? _draftRef.current.getEditorState() : '');
+    setRawState(_draftRef.current?.getRawState() ?? '');
+    setMarkdownState(_draftRef.current?.getMarkdownState() ?? '');
   }, [_draftRef]);
 
+  /**
+   * Check the data in react native debugger console
+   */
   console.log(editorState);
+  console.log('-----------');
+  console.log(rawState);
+  console.log('-----------');
+  console.log(markdownState);
 
   return (
     <SafeAreaView style={styles.containerStyle}>
