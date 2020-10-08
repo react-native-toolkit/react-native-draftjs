@@ -103,7 +103,11 @@ class RNDraftView extends Component<
       this.executeScript('setEditorPlaceholder', placeholder);
     }
     if (styleSheet) {
-      this.executeScript('setEditorStyleSheet', styleSheet);
+      // TODO: Replace single quotes with double quotes using regex
+      this.executeScript(
+        'setEditorStyleSheet',
+        styleSheet.replace(/(\r\n|\n|\r)/gm, '')
+      );
     }
     if (styleMap) {
       try {

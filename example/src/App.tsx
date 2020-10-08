@@ -92,6 +92,32 @@ const styleMap = {
   },
 };
 
+const editorStyleSheet = `
+  @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600&display=swap);
+  body {
+    background-color: red;
+  }
+  h1 > div > span > span {
+    font-family: "Source Sans Pro", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 28px;
+    color: black;
+  }
+  li > div > span > span {
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 15px;
+    line-height: 32px;
+    color: black;
+  }
+  span {
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 15px;
+    line-height: 26px;
+    color: black;
+  }
+`;
+
 const App = () => {
   const _draftRef = React.createRef<RNDraftView>();
   const [activeStyles, setActiveStyles] = useState<string[]>([]);
@@ -148,6 +174,7 @@ const App = () => {
         onStyleChanged={updateActiveStyle}
         onBlockTypeChanged={setActiveBlockType}
         styleMap={styleMap}
+        styleSheet={editorStyleSheet}
       />
       <EditorToolBar
         activeStyles={activeStyles}
