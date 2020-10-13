@@ -7,6 +7,9 @@ import {
   DefaultDraftBlockRenderMap,
   DraftHandleValue,
   convertToRaw,
+  ContentState,
+  convertFromRaw,
+  convertFromHTML,
 } from 'draft-js';
 import { stateFromHTML } from 'draft-js-import-html';
 import { stateToHTML } from 'draft-js-export-html';
@@ -17,6 +20,8 @@ import EditorController from './Components/EditorController/EditorController';
 import { ICustomWindow } from './types/ICustomWindow';
 
 declare let window: ICustomWindow;
+const blob =
+  '{"blocks":[{"key":"bkha4","text":"This is a Main Heading","type":"header-one","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"76ipm","text":"This is a text block.","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"ascg","text":"This is a list","type":"unordered-list-item","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"9um5u","text":"With multiple items","type":"unordered-list-item","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"5l5nn","text":"In it","type":"unordered-list-item","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"c4p9a","text":"This is a sub-heading","type":"header-two","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"4vqhn","text":"And this is another text block","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"3vknd","text":"This is a numbered","type":"ordered-list-item","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"56mei","text":"List with about","type":"ordered-list-item","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"365ag","text":"3 items in it","type":"ordered-list-item","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"6mtqe","text":"This is a small heading","type":"header-three","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"78d5h","text":"And this is some formatted text","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":4,"length":4,"style":"SUPERSCRIPT"},{"offset":9,"length":2,"style":"STRIKETHROUGH"},{"offset":12,"length":4,"style":"ITALIC"},{"offset":17,"length":9,"style":"BOLD"},{"offset":27,"length":4,"style":"UNDERLINE"}],"entityRanges":[],"data":{}}],"entityMap":{}}';
 
 /**
  * For testing the post messages
@@ -29,10 +34,13 @@ declare let window: ICustomWindow;
 export type defaultSourceType = 'string';
 
 function App() {
+
   const _draftEditorRef = useRef<Editor>(null);
+
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+
   const [placeholder, setPlaceholder] = useState('');
   const [editorStyle, setEditorStyle] = useState('');
   const [styleMap, setStyleMap] = useState({});
@@ -80,7 +88,8 @@ function App() {
   const setDefaultValue = (data: defaultSourceType) => {
     try {
       if (data) {
-        setEditorState(EditorState.createWithContent(stateFromHTML(data)));
+        const stateFromBlob = convertFromRaw(JSON.parse(data));
+        setEditorState(EditorState.createWithContent(stateFromBlob));
       }
     } catch (e) {
       console.error(e);
@@ -146,6 +155,7 @@ function App() {
     JSON.stringify({
       editorState: stateToHTML(editorState.getCurrentContent()),
       rawState: convertToRaw(editorState.getCurrentContent()),
+      plainText: editorState.getCurrentContent().getPlainText('\u0001'),
       markdownState: stateToMarkdown(editorState.getCurrentContent()),
       blockType: editorBlockType,
       styles: styleString,
