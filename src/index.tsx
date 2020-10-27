@@ -1,10 +1,13 @@
 import React, { Component, createRef } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import WebView, { WebViewMessageEvent } from 'react-native-webview';
+import WebView, {
+  WebViewMessageEvent,
+  WebViewProps,
+} from 'react-native-webview';
 
 const draftJsHtml = require('../draftjs-html-source/draftjs-source.html');
 
-export interface RNDraftViewProps {
+export interface RNDraftViewProps extends WebViewProps {
   style?: StyleProp<ViewStyle>;
   onStyleChanged?: (styles: string[]) => unknown;
   onBlockTypeChanged?: (blockType: string) => unknown;
@@ -138,15 +141,44 @@ class RNDraftView extends Component<
   };
 
   render() {
-    const { style = { flex: 1 } } = this.props;
+    const {
+      style = { flex: 1 },
+      keyboardDisplayRequiresUserAction = false,
+      originWhitelist = ['*'],
+      onMessage,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      onStyleChanged,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      onBlockTypeChanged,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      placeholder,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      defaultValue,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      styleSheet,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      styleMap,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      blockRenderMap,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      onEditorReady,
+      ...otherProps
+    } = this.props;
+
+    const onDraftMessage = (event: WebViewMessageEvent) => {
+      this._onMessage(event);
+      onMessage && onMessage(event);
+    };
+
     return (
       <WebView
         ref={this._webViewRef}
         style={style}
         source={draftJsHtml}
-        keyboardDisplayRequiresUserAction={false}
-        originWhitelist={['*']}
-        onMessage={this._onMessage}
+        keyboardDisplayRequiresUserAction={keyboardDisplayRequiresUserAction}
+        originWhitelist={originWhitelist}
+        onMessage={onDraftMessage}
+        {...otherProps}
       />
     );
   }
