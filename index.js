@@ -99,16 +99,16 @@ class RNDraftView extends Component {
     onEditorReady();
   };
 
-  // focus = () => {
-  //   this.executeScript("focusTextEditor");
-  // };
+  focus = () => {
+    this.executeScript("focusTextEditor");
+  };
 
   blur = () => {
     this.executeScript("blurTextEditor");
   };
 
   render() {
-    const { style = { flex: 1 } } = this.props;
+    const { style = { flex: 1, backgroundColor: "red" } } = this.props;
     return (
       <WebView
         ref={this._webViewRef}
@@ -119,12 +119,13 @@ class RNDraftView extends Component {
             : { uri: "file:///android_asset/draftjs-source.html" }
         }
         useWebKit={true}
-        keyboardDisplayRequiresUserAction={false}
+        keyboardDisplayRequiresUserAction={true}
         originWhitelist={["*"]}
         onMessage={this._onMessage}
       />
     );
   }
+  git;
 }
 
 export default RNDraftView;
