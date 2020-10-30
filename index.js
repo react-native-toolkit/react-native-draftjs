@@ -31,6 +31,13 @@ class RNDraftView extends Component {
       );
   };
 
+  executeScriptTwo = (functionName, parameter, parameterTwo) => {
+    this._webViewRef.current &&
+      this._webViewRef.current.injectJavaScript(
+        `window.${functionName}(${parameter ? `'${parameter}'` : ""});true;`
+      );
+  };
+
   setBlockType = blockType => {
     this.executeScript("toggleBlockType", blockType);
   };
@@ -108,7 +115,7 @@ class RNDraftView extends Component {
   };
 
   render() {
-    const { style = { flex: 1, backgroundColor: "red" } } = this.props;
+    const { style = { flex: 1 } } = this.props;
     return (
       <WebView
         ref={this._webViewRef}
