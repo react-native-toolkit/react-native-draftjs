@@ -122,7 +122,7 @@ class RNDraftView extends Component {
         keyboardDisplayRequiresUserAction={true}
         originWhitelist={["*"]}
         onMessage={this._onMessage}
-        hideKeyboardAccesoryView={true}
+        hideKeyboardAccessoryView={true}
       />
     );
   }
