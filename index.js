@@ -43,6 +43,10 @@ class RNDraftView extends Component {
     return this.state.editorState;
   };
 
+  setLink = () => {
+    this.executeScript("toggleLink", entitykey); // still missing one more props for the toggleLink though
+  };
+
   _onMessage = event => {
     const {
       onStyleChanged = () => null,
@@ -95,9 +99,9 @@ class RNDraftView extends Component {
     onEditorReady();
   };
 
-  focus = () => {
-    this.executeScript("focusTextEditor");
-  };
+  // focus = () => {
+  //   this.executeScript("focusTextEditor");
+  // };
 
   blur = () => {
     this.executeScript("blurTextEditor");
