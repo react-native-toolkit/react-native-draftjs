@@ -15,7 +15,9 @@ class RNDraftView extends Component {
     styleSheet: PropTypes.string,
     styleMap: PropTypes.object,
     blockRenderMap: PropTypes.object,
-    onEditorReady: PropTypes.func
+    onEditorReady: PropTypes.func,
+    targetSelection: PropTypes.string,
+    entitykey: PropTypes.string
   };
 
   _webViewRef = React.createRef();
@@ -114,6 +116,10 @@ class RNDraftView extends Component {
 
   blur = () => {
     this.executeScript("blurTextEditor");
+  };
+
+  getSelection = () => {
+    this.executeScript("getSelection");
   };
 
   render() {
