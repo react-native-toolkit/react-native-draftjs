@@ -108,7 +108,7 @@ function App() {
   };
 
   const getSelection = () => {
-    console.log("ayam bebek angsaaaaaaaa");
+    _draftEditorRef.current && _draftEditorRef.current.blur();
   };
 
   const setEditorBlockRenderMap = renderMapString => {
