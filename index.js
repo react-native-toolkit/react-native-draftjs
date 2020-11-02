@@ -119,7 +119,8 @@ class RNDraftView extends Component {
   };
 
   getSelection = () => {
-    return "ayam bebek angsa";
+    this.executeScript("getSelection");
+    return "ayam panas";
   };
 
   render() {

@@ -107,6 +107,10 @@ function App() {
     _draftEditorRef.current && _draftEditorRef.current.blur();
   };
 
+  const getSelection = () => {
+    console.log("ayam bebek angsaaaaaaaa");
+  };
+
   const setEditorBlockRenderMap = renderMapString => {
     try {
       setBlockRenderMap(Map(JSON.parse(renderMapString)));
@@ -114,10 +118,6 @@ function App() {
       setBlockRenderMap(Map({}));
       console.error(e);
     }
-  };
-
-  const getSelection = () => {
-    _draftEditorRef.current && _draftEditorRef.current.getSelection();
   };
 
   window.toggleBlockType = toggleBlockType;
