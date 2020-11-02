@@ -34,12 +34,16 @@ class RNDraftView extends Component {
   executeScriptTwo = (functionName, parameter, parameterTwo) => {
     this._webViewRef.current &&
       this._webViewRef.current.injectJavaScript(
-        `window.${functionName}(${parameter ? `'${parameter}'` : ""});true;`
+        `window.${functionName}(${
+          parameter && parameterTwo ? `'${parameter}', '${parameterTwo}'` : ""
+        });true;`
       );
+    console.log("parameterTwo lets fucking goooooooooo");
   };
 
   setBlockType = blockType => {
     this.executeScript("toggleBlockType", blockType);
+    console.log("terima apa sih dia ini blockType", blockType);
   };
 
   setStyle = style => {
@@ -51,7 +55,8 @@ class RNDraftView extends Component {
   };
 
   setLink = () => {
-    this.executeScript("toggleLink", entitykey); // still missing one more props for the toggleLink though
+    this.executeScriptTwo("toggleLink", targetSelection, entityKey);
+    console.log("setLink called");
   };
 
   _onMessage = event => {

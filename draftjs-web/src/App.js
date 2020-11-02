@@ -125,6 +125,7 @@ function App() {
   window.focusTextEditor = focusTextEditor;
   window.blurTextEditor = blurTextEditor;
   window.setEditorBlockRenderMap = setEditorBlockRenderMap;
+  window.toggleLink = toggleLink;
 
   if (window.ReactNativeWebView) {
     window.ReactNativeWebView.postMessage(
@@ -139,7 +140,7 @@ function App() {
   return (
     <>
       <style>
-        {`.public-DraftEditorPlaceholder-root{position: absolute;color: green;pointer-events: none;z-index: -10000;}${editorStyle}`}
+        {`.public-DraftEditorPlaceholder-root{position: absolute;color: silver;pointer-events: none;z-index: -10000;}${editorStyle}`}
       </style>
       <Editor
         ref={_draftEditorRef}
