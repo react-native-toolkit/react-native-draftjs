@@ -104,8 +104,9 @@ function App() {
   };
 
   const blurTextEditor = () => {
-    _draftEditorRef.current && _draftEditorRef.current.blur();
-    console.log("blurkeun lur");
+    _draftEditorRef.current &&
+      _draftEditorRef.current.blur() &&
+      console.log("blur");
   };
 
   const setEditorBlockRenderMap = renderMapString => {
