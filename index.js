@@ -121,6 +121,8 @@ class RNDraftView extends Component {
 
   render() {
     const { style = { flex: 1 } } = this.props;
+    console.log("terima apa sih dia ini blockType", blockType);
+
     return (
       <WebView
         ref={this._webViewRef}
