@@ -108,7 +108,8 @@ function App() {
   };
 
   const getSelection = () => {
-    _draftEditorRef.current && _draftEditorRef.current.blur();
+    _draftEditorRef.current;
+    return _draftEditorRef.current.getSelection();
   };
 
   const setEditorBlockRenderMap = renderMapString => {
