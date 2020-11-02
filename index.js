@@ -38,12 +38,10 @@ class RNDraftView extends Component {
           parameter && parameterTwo ? `'${parameter}', '${parameterTwo}'` : ""
         });true;`
       );
-    console.log("parameterTwo lets fucking goooooooooo");
   };
 
   setBlockType = blockType => {
     this.executeScript("toggleBlockType", blockType);
-    console.log("terima apa sih dia ini blockType", blockType);
   };
 
   setStyle = style => {
@@ -56,7 +54,6 @@ class RNDraftView extends Component {
 
   setLink = () => {
     this.executeScriptTwo("toggleLink", targetSelection, entityKey);
-    console.log("setLink called");
   };
 
   _onMessage = event => {
@@ -121,7 +118,6 @@ class RNDraftView extends Component {
 
   render() {
     const { style = { flex: 1 } } = this.props;
-    console.log("terima apa sih dia ini blockType", blockType);
 
     return (
       <WebView
