@@ -119,8 +119,7 @@ class RNDraftView extends Component {
   };
 
   getSelection = () => {
-    this.executeScript("getSelection");
-    return "ayam panas";
+    return this.executeScript("getSelection");
   };
 
   render() {
