@@ -119,7 +119,7 @@ class RNDraftView extends Component {
   };
 
   getSelection = () => {
-    this.executeScript("getSelection");
+    return this.executeScript("getSelection");
   };
 
   render() {
