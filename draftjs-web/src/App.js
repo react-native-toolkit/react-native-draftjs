@@ -104,9 +104,7 @@ function App() {
   };
 
   const blurTextEditor = () => {
-    _draftEditorRef.current &&
-      _draftEditorRef.current.blur() &&
-      console.log("blur");
+    _draftEditorRef.current && _draftEditorRef.current.blur();
   };
 
   const setEditorBlockRenderMap = renderMapString => {
@@ -116,6 +114,10 @@ function App() {
       setBlockRenderMap(Map({}));
       console.error(e);
     }
+  };
+
+  const getSelection = () => {
+    _draftEditorRef.current && _draftEditorRef.current.getSelection();
   };
 
   window.toggleBlockType = toggleBlockType;
@@ -128,6 +130,7 @@ function App() {
   window.blurTextEditor = blurTextEditor;
   window.setEditorBlockRenderMap = setEditorBlockRenderMap;
   window.toggleLink = toggleLink;
+  window.getSelection = getSelection;
 
   if (window.ReactNativeWebView) {
     window.ReactNativeWebView.postMessage(
