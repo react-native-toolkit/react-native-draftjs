@@ -1,126 +1,152 @@
+var __extends =
+  (this && this.__extends) ||
+  (function() {
+    var extendStatics = function(d, b) {
+      extendStatics =
+        Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array &&
+          function(d, b) {
+            d.__proto__ = b;
+          }) ||
+        function(d, b) {
+          for (var p in b)
+            if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p];
+        };
+      return extendStatics(d, b);
+    };
+    return function(d, b) {
+      extendStatics(d, b);
+      function __() {
+        this.constructor = d;
+      }
+      d.prototype =
+        b === null
+          ? Object.create(b)
+          : ((__.prototype = b.prototype), new __());
+    };
+  })();
 import React, { Component } from "react";
-import { ViewPropTypes, Platform } from "react-native";
+import { Platform } from "react-native";
 import WebView from "react-native-webview";
-import PropTypes from "prop-types";
-
-const draftJsHtml = require("./draftjs-html-source/draftjs-source.html");
-
-class RNDraftView extends Component {
-  static propTypes = {
-    style: ViewPropTypes.style,
-    onStyleChanged: PropTypes.func,
-    onBlockTypeChanged: PropTypes.func,
-    defaultValue: PropTypes.string,
-    placeholder: PropTypes.string,
-    styleSheet: PropTypes.string,
-    styleMap: PropTypes.object,
-    blockRenderMap: PropTypes.object,
-    onEditorReady: PropTypes.func
-  };
-
-  _webViewRef = React.createRef();
-
-  state = {
-    editorState: ""
-  };
-
-  executeScript = (functionName, parameter) => {
-    this._webViewRef.current &&
-      this._webViewRef.current.injectJavaScript(
-        `window.${functionName}(${parameter ? `'${parameter}'` : ""});true;`
-      );
-  };
-
-  setBlockType = blockType => {
-    this.executeScript("toggleBlockType", blockType);
-  };
-
-  setStyle = style => {
-    this.executeScript("toggleInlineStyle", style);
-  };
-
-  getEditorState = () => {
-    return this.state.editorState;
-  };
-
-  _onMessage = event => {
-    const {
-      onStyleChanged = () => null,
-      onBlockTypeChanged = () => null
-    } = this.props;
-    const { data } = event.nativeEvent;
-    const { blockType, styles, editorState, isMounted } = JSON.parse(data);
-    onStyleChanged(styles ? styles.split(",") : []);
-    if (blockType) onBlockTypeChanged(blockType);
-    if (editorState)
-      this.setState({ editorState: editorState.replace(/(\r\n|\n|\r)/gm, "") });
-    if (isMounted) this.widgetMounted();
-  };
-
-  widgetMounted = () => {
-    const {
-      placeholder,
-      defaultValue,
-      styleSheet,
-      styleMap,
-      blockRenderMap,
-      onEditorReady = () => null
-    } = this.props;
-    if (defaultValue) {
-      this.executeScript("setDefaultValue", defaultValue);
-    }
-    if (placeholder) {
-      this.executeScript("setEditorPlaceholder", placeholder);
-    }
-    if (styleSheet) {
-      this.executeScript("setEditorStyleSheet", styleSheet);
-    }
-    if (styleMap) {
-      try {
-        this.executeScript("setEditorStyleMap", JSON.stringify(styleMap));
-      } catch (e) {
-        console.error(e);
-      }
-    }
-    if (blockRenderMap) {
-      try {
-        this.executeScript(
-          "setEditorBlockRenderMap",
-          JSON.stringify(blockRenderMap)
+var draftJsHtml = require("./draftjs-html-source/draftjs-source.html");
+var RNDraftView = (function(_super) {
+  __extends(RNDraftView, _super);
+  function RNDraftView() {
+    var _this = (_super !== null && _super.apply(this, arguments)) || this;
+    _this.webViewRef = React.createRef();
+    _this.state = {
+      editorState: ""
+    };
+    _this.executeScript = function(functionName, parameter) {
+      if (_this.webViewRef.current) {
+        _this.webViewRef.current.injectJavaScript(
+          "window." +
+            functionName +
+            "(" +
+            (parameter ? "'" + parameter + "'" : "") +
+            ");true;"
         );
-      } catch (e) {
-        console.error(e);
       }
-    }
-    onEditorReady();
-  };
-
-  focus = () => {
-    this.executeScript("focusTextEditor");
-  };
-
-  blur = () => {
-    this.executeScript("blurTextEditor");
-  };
-
-  render() {
-    const { style = { flex: 1 } } = this.props;
-    return (
-      <WebView
-        ref={this._webViewRef}
-        style={style}
-        source={
-          Platform.OS === "ios"
-            ? draftJsHtml
-            : { uri: "file:///android_asset/draftjs-source.html" }
+    };
+    _this.onMessage = function(event) {
+      var _a = _this.props,
+        onStyleChanged = _a.onStyleChanged,
+        onBlockTypeChanged = _a.onBlockTypeChanged;
+      var data = event.nativeEvent.data;
+      var _b = JSON.parse(data),
+        blockType = _b.blockType,
+        styles = _b.styles,
+        editorState = _b.editorState,
+        isMounted = _b.isMounted;
+      if (onStyleChanged) {
+        onStyleChanged(styles ? styles.split(",") : []);
+      }
+      if (blockType) {
+        onBlockTypeChanged(blockType);
+      }
+      if (editorState) {
+        _this.setState({
+          editorState: editorState.replace(/(\r\n|\n|\r)/gm, "")
+        });
+      }
+      if (isMounted) {
+        _this.widgetMounted();
+      }
+    };
+    _this.widgetMounted = function() {
+      var _a = _this.props,
+        placeholder = _a.placeholder,
+        defaultValue = _a.defaultValue,
+        styleSheet = _a.styleSheet,
+        styleMap = _a.styleMap,
+        blockRenderMap = _a.blockRenderMap,
+        _b = _a.onEditorReady,
+        onEditorReady =
+          _b === void 0
+            ? function() {
+                return null;
+              }
+            : _b;
+      if (defaultValue) {
+        _this.executeScript("setDefaultValue", defaultValue);
+      }
+      if (placeholder) {
+        _this.executeScript("setEditorPlaceholder", placeholder);
+      }
+      if (styleSheet) {
+        _this.executeScript("setEditorStyleSheet", styleSheet);
+      }
+      if (styleMap) {
+        try {
+          _this.executeScript("setEditorStyleMap", JSON.stringify(styleMap));
+        } catch (e) {
+          console.error(e);
         }
-        useWebKit={true}
-        keyboardDisplayRequiresUserAction={false}
-        originWhitelist={["*"]}
-        onMessage={this._onMessage}
-      />
-    );
+      }
+      if (blockRenderMap) {
+        try {
+          _this.executeScript(
+            "setEditorBlockRenderMap",
+            JSON.stringify(blockRenderMap)
+          );
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      onEditorReady();
+    };
+    _this.focus = function() {
+      _this.executeScript("focusTextEditor");
+    };
+    _this.blur = function() {
+      _this.executeScript("blurTextEditor");
+    };
+    _this.setBlockType = function(blockType) {
+      _this.executeScript("toggleBlockType", blockType);
+    };
+    _this.setStyle = function(style) {
+      _this.executeScript("toggleInlineStyle", style);
+    };
+    _this.getEditorState = function() {
+      return _this.state.editorState;
+    };
+    return _this;
   }
-}
-
+  RNDraftView.prototype.render = function() {
+    var _a = this.props.style,
+      style = _a === void 0 ? { flex: 1 } : _a;
+    return React.createElement(WebView, {
+      ref: this.webViewRef,
+      style: style,
+      source:
+        Platform.OS === "ios"
+          ? draftJsHtml
+          : { uri: "file:///android_asset/draftjs-source.html" },
+      keyboardDisplayRequiresUserAction: false,
+      originWhitelist: ["*"],
+      onMessage: this.onMessage
+    });
+  };
+  return RNDraftView;
+})(Component);
 export default RNDraftView;
