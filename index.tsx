@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { ViewStyle, Platform } from "react-native";
 import WebView, { WebViewMessageEvent } from "react-native-webview";
-
 const draftJsHtml = require("./draftjs-html-source/draftjs-source.html");
 
-export type StyleEnum = "BOLD" | "ITALIC" | "UNDERLINE" | "CODE";
+export type StyleEnum = "BOLD" | "ITALIC" | "UNDERLINE" | "CODE" | string;
 export type BlockTypeEnum =
   | "unstyled"
   | "paragraph"
@@ -18,7 +17,8 @@ export type BlockTypeEnum =
   | "ordered-list-item"
   | "blockquote"
   | "code-block"
-  | "atomic";
+  | "atomic"
+  | string;
 type PropTypes = {
   style?: ViewStyle;
   defaultValue?: string;

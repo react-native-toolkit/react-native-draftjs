@@ -1,6 +1,11 @@
 import { Component } from "react";
 import { ViewStyle } from "react-native";
-export declare type StyleEnum = "BOLD" | "ITALIC" | "UNDERLINE" | "CODE";
+export declare type StyleEnum =
+  | "BOLD"
+  | "ITALIC"
+  | "UNDERLINE"
+  | "CODE"
+  | string;
 export declare type BlockTypeEnum =
   | "unstyled"
   | "paragraph"
@@ -14,7 +19,8 @@ export declare type BlockTypeEnum =
   | "ordered-list-item"
   | "blockquote"
   | "code-block"
-  | "atomic";
+  | "atomic"
+  | string;
 declare type PropTypes = {
   style?: ViewStyle;
   defaultValue?: string;
