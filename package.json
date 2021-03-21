@@ -1,6 +1,6 @@
 {
   "name": "react-native-draftjs-editor",
-  "version": "0.0.3-alpha-1",
+  "version": "0.0.3-alpha-3",
   "description": "A full fledged React Native Rich Text editor based on draft.js",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
