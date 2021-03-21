@@ -12,6 +12,7 @@
     "lib",
     "draftjs-html-source",
     "!lib/typescript/example",
+    "!lib/typescript/expo-example",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
