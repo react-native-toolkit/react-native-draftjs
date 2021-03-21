@@ -1,5 +1,6 @@
 import React, { Component, createRef } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { encode, decode } from 'html-entities';
 import WebView, {
   WebViewMessageEvent,
   WebViewProps,
@@ -44,7 +45,9 @@ class RNDraftView extends Component<
   executeScript = (functionName: WebDraftFunctions, parameter?: string) => {
     this._webViewRef.current &&
       this._webViewRef.current.injectJavaScript(
-        `window.${functionName}(${parameter ? `'${parameter}'` : ''});true;`
+        `window.${functionName}(${
+          parameter ? `'${encode(parameter)}'` : ''
+        });true;`
       );
   };
 
@@ -81,7 +84,7 @@ class RNDraftView extends Component<
       rawState,
       markdownState,
       isMounted,
-    } = JSON.parse(data);
+    } = JSON.parse(decode(data));
     onStyleChanged(styles ? styles.split(',') : []);
     if (blockType) onBlockTypeChanged(blockType);
     if (editorState) this.setState({ editorState });

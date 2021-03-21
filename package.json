@@ -138,6 +138,7 @@
     ]
   },
   "dependencies": {
+    "html-entities": "2.1.1",
     "react-native-webview": "^10.9.2"
   }
 }

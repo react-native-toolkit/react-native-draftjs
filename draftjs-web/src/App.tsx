@@ -8,6 +8,7 @@ import {
   DraftHandleValue,
   convertToRaw,
 } from 'draft-js';
+import { encode, decode } from 'html-entities';
 import { stateFromHTML } from 'draft-js-import-html';
 import { stateToHTML } from 'draft-js-export-html';
 // @ts-ignore
@@ -70,17 +71,21 @@ function App() {
   };
 
   const toggleBlockType = (blockType: string) => {
-    setEditorState(RichUtils.toggleBlockType(editorState, blockType));
+    setEditorState(RichUtils.toggleBlockType(editorState, decode(blockType)));
   };
 
   const toggleInlineStyle = (inlineStyle: string) => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
+    setEditorState(
+      RichUtils.toggleInlineStyle(editorState, decode(inlineStyle))
+    );
   };
 
   const setDefaultValue = (data: defaultSourceType) => {
     try {
       if (data) {
-        setEditorState(EditorState.createWithContent(stateFromHTML(data)));
+        setEditorState(
+          EditorState.createWithContent(stateFromHTML(decode(data)))
+        );
       }
     } catch (e) {
       console.error(e);
@@ -88,15 +93,15 @@ function App() {
   };
 
   const setEditorPlaceholder = (placeholder: string) => {
-    setPlaceholder(placeholder);
+    setPlaceholder(decode(placeholder));
   };
 
   const setEditorStyleSheet = (styleSheet: string) => {
-    setEditorStyle(styleSheet);
+    setEditorStyle(decode(styleSheet));
   };
 
   const setEditorStyleMap = (editorStyleMap: string) => {
-    setStyleMap(JSON.parse(editorStyleMap));
+    setStyleMap(JSON.parse(decode(editorStyleMap)));
   };
 
   const focusTextEditor = () => {
@@ -109,7 +114,7 @@ function App() {
 
   const setEditorBlockRenderMap = (renderMapString: string) => {
     try {
-      setBlockRenderMap(Map(JSON.parse(renderMapString)));
+      setBlockRenderMap(Map(JSON.parse(decode(renderMapString))));
     } catch (e) {
       setBlockRenderMap(Map({}));
       console.error(e);
@@ -143,13 +148,15 @@ function App() {
   }
 
   window?.ReactNativeWebView?.postMessage?.(
-    JSON.stringify({
-      editorState: stateToHTML(editorState.getCurrentContent()),
-      rawState: convertToRaw(editorState.getCurrentContent()),
-      markdownState: stateToMarkdown(editorState.getCurrentContent()),
-      blockType: editorBlockType,
-      styles: styleString,
-    })
+    encode(
+      JSON.stringify({
+        editorState: stateToHTML(editorState.getCurrentContent()),
+        rawState: convertToRaw(editorState.getCurrentContent()),
+        markdownState: stateToMarkdown(editorState.getCurrentContent()),
+        blockType: editorBlockType,
+        styles: styleString,
+      })
+    )
   );
 
   const customBlockRenderMap = DefaultDraftBlockRenderMap.merge(blockRenderMap);
