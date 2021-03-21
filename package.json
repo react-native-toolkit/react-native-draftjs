@@ -26,7 +26,7 @@
     "draft-web": "yarn --cwd draftjs-web",
     "example": "yarn --cwd example",
     "pods": "cd example && pod-install --quiet",
-    "bootstrap": "yarn example && yarn draft-web && yarn draft-web build && yarn && yarn pods"
+    "bootstrap": "yarn example && yarn draft-web && SKIP_PREFLIGHT_CHECK=true yarn draft-web build && yarn && yarn pods"
   },
   "keywords": [
     "react-native",
