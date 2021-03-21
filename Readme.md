@@ -5,6 +5,7 @@ A full fledged React Native Rich Text editor based on [Draft.js](https://draftjs
 ### Installation
 
 #### React Native Webview
+
 This project requires the latest version of [React Native Webview](https://github.com/react-native-community/react-native-webview) to be installed and linked to work properly.
 
 Install using npm:
@@ -54,35 +55,37 @@ _iOS installation does not require any additional steps._
 
 ### Instance methods
 
-| Name           | Params                                                                                                                                                      | Description                                                                                                                                  |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| focus          | -                                                                                                                                                           | shift focus to the rich text editor                                                                                                          |
-| blur           | -                                                                                                                                                           | removes focus from the rich text editor                                                                                                      |
-| setStyle       | `BOLD`, `ITALIC`, `UNDERLINE` and `CODE`                                                                                                                    | call this instance method to apply a style to the selected/active text. Call this again with the same style to remove it.                    |
-| setBlockType   | Supports the default block types supported by draft.js [editor](https://github.com/facebook/draft-js/blob/master/src/component/utils/DraftStyleDefault.css) | Call this instance method to apply and call it again to remove the style.                                                                    |
-| getEditorState | -                                                                                                                                                           | Returns the current editor state as a HTML string exported using [draft-js-export-html](https://www.npmjs.com/package/draft-js-export-html). |
+| Name             | Params                                                                                                                                                      | Description                                                                                                                                      |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| focus            | -                                                                                                                                                           | shift focus to the rich text editor                                                                                                              |
+| blur             | -                                                                                                                                                           | removes focus from the rich text editor                                                                                                          |
+| setStyle         | `BOLD`, `ITALIC`, `UNDERLINE` and `CODE`                                                                                                                    | call this instance method to apply a style to the selected/active text. Call this again with the same style to remove it.                        |
+| setBlockType     | Supports the default block types supported by draft.js [editor](https://github.com/facebook/draft-js/blob/master/src/component/utils/DraftStyleDefault.css) | Call this instance method to apply and call it again to remove the style.                                                                        |
+| getEditorState   | -                                                                                                                                                           | Returns the current editor state as a HTML string exported using [draft-js-export-html](https://www.npmjs.com/package/draft-js-export-html).     |
+| getRawState      | -                                                                                                                                                           | Returns the current editor state as a Draft.js state object.                                                                                     |
+| getMarkdownState | -                                                                                                                                                           | Returns the current editor state as a Markdown exported using [draft-js-export-markdown](https://www.npmjs.com/package/draft-js-export-markdown) |
 
 ## Sample Usage
 
 ```jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   View,
   Text,
-  Platform
-} from "react-native";
-import KeyboardSpacer from "react-native-keyboard-spacer";
-import RNDraftView from "react-native-draftjs-editor";
+  Platform,
+} from 'react-native';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
+import RNDraftView from 'react-native-draftjs-editor';
 
 const ControlButton = ({ text, action, isActive }) => {
   return (
     <TouchableOpacity
       style={[
         styles.controlButtonContainer,
-        isActive ? { backgroundColor: "gold" } : {}
+        isActive ? { backgroundColor: 'gold' } : {},
       ]}
       onPress={action}
     >
@@ -95,39 +98,39 @@ const EditorToolBar = ({
   activeStyles,
   blockType,
   toggleStyle,
-  toggleBlockType
+  toggleBlockType,
 }) => {
   return (
     <View style={styles.toolbarContainer}>
       <ControlButton
-        text={"B"}
-        isActive={activeStyles.includes("BOLD")}
-        action={() => toggleStyle("BOLD")}
+        text={'B'}
+        isActive={activeStyles.includes('BOLD')}
+        action={() => toggleStyle('BOLD')}
       />
       <ControlButton
-        text={"I"}
-        isActive={activeStyles.includes("ITALIC")}
-        action={() => toggleStyle("ITALIC")}
+        text={'I'}
+        isActive={activeStyles.includes('ITALIC')}
+        action={() => toggleStyle('ITALIC')}
       />
       <ControlButton
-        text={"H"}
-        isActive={blockType === "header-one"}
-        action={() => toggleBlockType("header-one")}
+        text={'H'}
+        isActive={blockType === 'header-one'}
+        action={() => toggleBlockType('header-one')}
       />
       <ControlButton
-        text={"ul"}
-        isActive={blockType === "unordered-list-item"}
-        action={() => toggleBlockType("unordered-list-item")}
+        text={'ul'}
+        isActive={blockType === 'unordered-list-item'}
+        action={() => toggleBlockType('unordered-list-item')}
       />
       <ControlButton
-        text={"ol"}
-        isActive={blockType === "ordered-list-item"}
-        action={() => toggleBlockType("ordered-list-item")}
+        text={'ol'}
+        isActive={blockType === 'ordered-list-item'}
+        action={() => toggleBlockType('ordered-list-item')}
       />
       <ControlButton
-        text={"--"}
-        isActive={activeStyles.includes("STRIKETHROUGH")}
-        action={() => toggleStyle("STRIKETHROUGH")}
+        text={'--'}
+        isActive={activeStyles.includes('STRIKETHROUGH')}
+        action={() => toggleStyle('STRIKETHROUGH')}
       />
     </View>
   );
@@ -135,28 +138,28 @@ const EditorToolBar = ({
 
 const styleMap = {
   STRIKETHROUGH: {
-    textDecoration: "line-through"
-  }
+    textDecoration: 'line-through',
+  },
 };
 
 const App = () => {
   const _draftRef = React.createRef();
   const [activeStyles, setActiveStyles] = useState([]);
-  const [blockType, setActiveBlockType] = useState("unstyled");
-  const [editorState, setEditorState] = useState("");
+  const [blockType, setActiveBlockType] = useState('unstyled');
+  const [editorState, setEditorState] = useState('');
 
   const defaultValue =
-    "<h1>A Full fledged Text Editor</h1><p>This editor is built with Draft.js. Hence should be suitable for most projects. However, Draft.js Isn’t fully compatible with mobile yet. So you might face some issues.</p><p><br></p><p>This is a simple implementation</p><ul>  <li>It contains <strong>Text formatting </strong>and <em>Some blocks formatting</em></li>  <li>Each for it’s own purpose</li></ul><p>You can also do</p><ol>  <li>Custom style map</li>  <li>Own css styles</li>  <li>Custom block styling</li></ol><p>You are welcome to try it!</p>";
+    '<h1>A Full fledged Text Editor</h1><p>This editor is built with Draft.js. Hence should be suitable for most projects. However, Draft.js Isn’t fully compatible with mobile yet. So you might face some issues.</p><p><br></p><p>This is a simple implementation</p><ul>  <li>It contains <strong>Text formatting </strong>and <em>Some blocks formatting</em></li>  <li>Each for it’s own purpose</li></ul><p>You can also do</p><ol>  <li>Custom style map</li>  <li>Own css styles</li>  <li>Custom block styling</li></ol><p>You are welcome to try it!</p>';
 
   const editorLoaded = () => {
     _draftRef.current && _draftRef.current.focus();
   };
 
-  const toggleStyle = style => {
+  const toggleStyle = (style) => {
     _draftRef.current && _draftRef.current.setStyle(style);
   };
 
-  const toggleBlockType = blockType => {
+  const toggleBlockType = (blockType) => {
     _draftRef.current && _draftRef.current.setBlockType(blockType);
   };
 
@@ -165,7 +168,7 @@ const App = () => {
      * Get the current editor state in HTML.
      * Usually keep it in the submit or next action to get output after user has typed.
      */
-    setEditorState(_draftRef.current ? _draftRef.current.getEditorState() : "");
+    setEditorState(_draftRef.current ? _draftRef.current.getEditorState() : '');
   }, [_draftRef]);
   console.log(editorState);
 
@@ -175,7 +178,7 @@ const App = () => {
         defaultValue={defaultValue}
         onEditorReady={editorLoaded}
         style={{ flex: 1 }}
-        placeholder={"Add text here..."}
+        placeholder={'Add text here...'}
         ref={_draftRef}
         onStyleChanged={setActiveStyles}
         onBlockTypeChanged={setActiveBlockType}
@@ -187,7 +190,7 @@ const App = () => {
         toggleStyle={toggleStyle}
         toggleBlockType={toggleBlockType}
       />
-      {Platform.OS === "ios" ? <KeyboardSpacer /> : null}
+      {Platform.OS === 'ios' ? <KeyboardSpacer /> : null}
     </SafeAreaView>
   );
 };
@@ -195,19 +198,19 @@ const App = () => {
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
-    marginTop: 36
+    marginTop: 36,
   },
   toolbarContainer: {
     height: 56,
-    flexDirection: "row",
-    backgroundColor: "silver",
-    alignItems: "center",
-    justifyContent: "space-around"
+    flexDirection: 'row',
+    backgroundColor: 'silver',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
   controlButtonContainer: {
     padding: 8,
-    borderRadius: 2
-  }
+    borderRadius: 2,
+  },
 });
 
 export default App;
