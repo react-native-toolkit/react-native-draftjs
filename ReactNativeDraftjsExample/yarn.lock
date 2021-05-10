@@ -3910,9 +3910,9 @@ lodash.unescape@4.0.1:
   integrity sha1-vyJJiGzlFM2hEvrpIYzcBlIR/Jw=
 
 lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.6.1:
-  version "4.17.14"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.14.tgz#9ce487ae66c96254fe20b599f21b6816028078ba"
-  integrity sha512-mmKYbW3GLuJeX+iGP+Y7Gp1AiGHGbXHCOh/jZmrawMmsE7MS4znI3RL2FsjbqOyMayHInjOeykW7PEajUk1/xw==
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 log-symbols@^2.2.0:
   version "2.2.0"
@@ -5115,10 +5115,10 @@ react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
 
-react-native-draftjs-editor@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-draftjs-editor/-/react-native-draftjs-editor-0.0.1.tgz#41fc8cff090937fe02a2f82f22c71e40b31013d6"
-  integrity sha512-uYDez+zFsOk8+L7wN4OUcaGO81MeBHEGreZG9q7zTwG+3IpmyLvNwHGUFBH5ROqtrrXC83ivO1h450OzbjHu1A==
+react-native-draftjs-editor@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-draftjs-editor/-/react-native-draftjs-editor-0.0.2.tgz#83a3d83feaefb5fb27d0ee75e47999a0cd18ec00"
+  integrity sha512-L0WASWxd9xU/o83Fhompmxzff+I9q3/yyPVU/6NVRD+TmPcyVqLZdYDGambIrbNfducVo66KKcwtqXMvDTF0CA==
 
 react-native-keyboard-spacer@^0.4.1:
   version "0.4.1"
