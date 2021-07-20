@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "react": "16.8.6",
-    "react-native": "0.60.3",
+    "react-native": "0.62.3",
     "react-native-draftjs-editor": "0.0.2",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-webview": "6.3.1"
