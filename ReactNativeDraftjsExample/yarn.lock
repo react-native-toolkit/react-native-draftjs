@@ -1918,9 +1918,9 @@ decamelize@^1.1.1, decamelize@^1.2.0:
   integrity sha1-9lNNFRSCabIDUue+4m9QH5oZEpA=
 
 decode-uri-component@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
-  integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
+  integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
 
 deep-extend@^0.6.0:
   version "0.6.0"
@@ -5115,10 +5115,10 @@ react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==
 
-react-native-draftjs-editor@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-draftjs-editor/-/react-native-draftjs-editor-0.0.1.tgz#41fc8cff090937fe02a2f82f22c71e40b31013d6"
-  integrity sha512-uYDez+zFsOk8+L7wN4OUcaGO81MeBHEGreZG9q7zTwG+3IpmyLvNwHGUFBH5ROqtrrXC83ivO1h450OzbjHu1A==
+react-native-draftjs-editor@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-draftjs-editor/-/react-native-draftjs-editor-0.0.2.tgz#83a3d83feaefb5fb27d0ee75e47999a0cd18ec00"
+  integrity sha512-L0WASWxd9xU/o83Fhompmxzff+I9q3/yyPVU/6NVRD+TmPcyVqLZdYDGambIrbNfducVo66KKcwtqXMvDTF0CA==
 
 react-native-keyboard-spacer@^0.4.1:
   version "0.4.1"
